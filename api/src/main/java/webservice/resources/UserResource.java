@@ -1,6 +1,7 @@
 package webservice.resources;
 
 import webservice.dto.User;
+import webservice.services.TransactionService;
 import webservice.services.UserService;
 
 import javax.inject.Inject;
@@ -12,12 +13,19 @@ import javax.ws.rs.core.Response;
 public class UserResource {
 
     private UserService userService;
+    private TransactionService transactionService;
 
     @Inject
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+    @Inject
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
+
+    // USER CRUDS
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -45,5 +53,12 @@ public class UserResource {
         return Response.ok(userService.updateUser(user)).build();
     }
 
+    //USER TRANSACTION CRUDS
+
+    @GET
+    @Path("{id}/transactions")
+    public Response getAllUserTransactions(@PathParam("id") int userId){
+        return Response.ok(transactionService.getAllTransactionsByUserId(userId)).build();
+    }
 
 }
