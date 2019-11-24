@@ -28,11 +28,6 @@
             <artifactId>jersey-cdi2-se</artifactId>
             <version>2.29.1</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.4.9.Final</version>
-        </dependency>
     </dependencies>
     <build>
         <finalName>api</finalName>

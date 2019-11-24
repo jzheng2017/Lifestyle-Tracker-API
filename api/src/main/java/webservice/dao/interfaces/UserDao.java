@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface UserDao {
 
-    User getUser();
+    User getUser(int userId);
 
-    void updateUser();
+    boolean updateUser(User user);
 
-    void deleteUser();
+    boolean deleteUser(int userId);
 
-    void insertUser(User user);
+    boolean insertUser(User user);
 
     List<User> getAll();
 }

@@ -1,8 +1,9 @@
 package webservice.datasource.core;
 
-import nl.han.ica.oose.dea.datasource.util.DatabaseProperties;
-import nl.han.ica.oose.dea.datasource.util.SqlLoader;
+import webservice.datasource.util.DatabaseProperties;
+import webservice.datasource.util.SqlLoader;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ public class Database {
     private SqlLoader sqlLoader;
     private static Connection connection;
     private Logger log = Logger.getLogger(getClass().getName());
+    private PreparedStatement statement;
 
     public Database(String resource) {
         this.sqlLoader = new SqlLoader(resource);
@@ -23,8 +25,7 @@ public class Database {
 
     }
 
-    public ResultSet query(String sql, String[] parameters) {
-        ResultSet result = null;
+    public Database query(String sql, String[] parameters) {
         try {
             PreparedStatement statement = connection.prepareStatement(sqlLoader.get(sql));
 
@@ -34,6 +35,26 @@ public class Database {
                 }
             }
 
+            this.statement = statement;
+
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, e.getMessage());
+        }
+        return this;
+    }
+
+    public ResultSet executeQuery() {
+        try {
+            return statement.executeQuery();
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, e.getMessage());
+        }
+        return null;
+    }
+
+    public ResultSet execute() {
+        ResultSet result = null;
+        try {
             if (statement.execute()) {
                 result = statement.getResultSet();
             }
@@ -43,8 +64,17 @@ public class Database {
         return result;
     }
 
+    public int executeUpdate() {
+        try {
+            return statement.executeUpdate();
+        } catch (SQLException e) {
+            log.log(Level.SEVERE, e.getMessage());
+        }
+        return 0;
+    }
 
-    public void getConnection() {
+
+    private void getConnection() {
         try {
             Class.forName(dbProperties.getDriver());
 
