@@ -15,6 +15,9 @@ public class Category {
         this.updatedAt = updatedAt;
     }
 
+    public Category(int categoryId, String categoryName, int parentId) {
+    }
+
     public String getName() {
         return name;
     }

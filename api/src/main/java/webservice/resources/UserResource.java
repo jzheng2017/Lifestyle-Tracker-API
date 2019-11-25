@@ -36,7 +36,7 @@ public class UserResource {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("id") int userId){
+    public Response getUser(@PathParam("id") int userId) {
         return Response.ok(userService.getUser(userId)).build();
     }
 
@@ -57,8 +57,21 @@ public class UserResource {
 
     @GET
     @Path("{id}/transactions")
-    public Response getAllUserTransactions(@PathParam("id") int userId){
+    public Response getAllUserTransactions(@PathParam("id") int userId) {
         return Response.ok(transactionService.getAllTransactionsByUserId(userId)).build();
+    }
+
+    @GET
+    @Path("{id}/transactions/expense")
+    public Response getAllUserExpenses(@PathParam("id") int userId) {
+        return Response.ok(transactionService.getAllUserExpenses(userId)).build();
+    }
+
+
+    @GET
+    @Path("{id}/transactions/income")
+    public Response getAllUserIncome(@PathParam("id") int userId) {
+        return Response.ok(transactionService.getAllUserIncome(userId)).build();
     }
 
 }

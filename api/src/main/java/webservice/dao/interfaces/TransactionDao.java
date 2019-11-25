@@ -8,17 +8,24 @@ public interface TransactionDao {
 
     Transaction getTransaction(int transactionId);
 
-    boolean updateTransaction(Transaction user);
+    boolean updateTransaction(Transaction transaction);
 
-    boolean deleteTransaction(int userId);
+    boolean deleteTransaction(int transactionId);
 
-    boolean insertTransaction(Transaction user);
+    boolean insertTransaction(Transaction transaction);
 
     List<Transaction> getAll();
 
     List<Transaction> getAllIncome();
 
     List<Transaction> getAllExpenses();
+
+    List<Transaction> getAllByUserId(int userId);
+
+    List<Transaction> getAllUserExpenses(int userId);
+
+    List<Transaction> getAllUserIncome(int userId);
+
 
 
 }

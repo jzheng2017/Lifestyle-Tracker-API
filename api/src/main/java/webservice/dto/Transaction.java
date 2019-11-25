@@ -5,20 +5,22 @@ public class Transaction {
     private String name;
     private String comment;
     private int amount;
-    private String type;
-    private String occurence;
+    private TransactionType type;
+    private int userId;
+    private Occurrence occurrence;
     private String transactionDate;
-    private String category;
+    private Category category;
     private String createdAt;
     private String updatedAt;
 
-    public Transaction(int id, String name, String comment, int amount, String type, String occurence, String transactionDate, String category, String createdAt, String updatedAt) {
+    public Transaction(int id, String name, String comment, int amount, TransactionType type, int userId, Occurrence occurrence, String transactionDate, Category category, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
         this.comment = comment;
         this.amount = amount;
         this.type = type;
-        this.occurence = occurence;
+        this.userId = userId;
+        this.occurrence = occurrence;
         this.transactionDate = transactionDate;
         this.category = category;
         this.createdAt = createdAt;
@@ -41,11 +43,11 @@ public class Transaction {
         this.createdAt = createdAt;
     }
 
-    public String getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
@@ -89,19 +91,27 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public String getType() {
+    public TransactionType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TransactionType type) {
         this.type = type;
     }
 
-    public String getOccurence() {
-        return occurence;
+    public Occurrence getOccurrence() {
+        return occurrence;
     }
 
-    public void setOccurence(String occurence) {
-        this.occurence = occurence;
+    public void setOccurrence(Occurrence occurrence) {
+        this.occurrence = occurrence;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

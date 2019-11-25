@@ -59,7 +59,7 @@ public class CategoryDaoImpl implements CategoryDao {
             if (result.getRow() < 1 && result.next() && result.getRow() > 1) result.previous();
             if (result.getRow() > 0) {
                 int id = result.getInt("id");
-                String name = result.getString("name");
+                String name = result.getString("category_name");
                 int parentId = result.getInt("parent_id");
                 String createdAt = result.getString("created_at");
                 String updatedAt = result.getString("updated_at");
