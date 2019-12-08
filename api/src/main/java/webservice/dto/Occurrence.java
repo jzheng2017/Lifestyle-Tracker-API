@@ -4,6 +4,7 @@ public class Occurrence {
     private int id;
     private String occurrence;
 
+    public Occurrence(){}
     public Occurrence(int id, String occurrence) {
         this.id = id;
         this.occurrence = occurrence;

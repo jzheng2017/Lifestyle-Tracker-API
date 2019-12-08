@@ -2,10 +2,7 @@ package webservice.dao;
 
 import webservice.dao.interfaces.TransactionDao;
 import webservice.datasource.core.Database;
-import webservice.dto.Category;
-import webservice.dto.Occurrence;
-import webservice.dto.Transaction;
-import webservice.dto.TransactionType;
+import webservice.dto.*;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,37 +14,58 @@ public class TransactionDaoImpl implements TransactionDao {
 
     @Override
     public Transaction getTransaction(int transactionId) {
-        return null;
+        return createTransaction(db.query("select.transaction.by.id", new String[]{Integer.toString(transactionId)}).execute());
     }
 
     @Override
     public boolean updateTransaction(Transaction transaction) {
-        return false;
+        String[] parameters = {
+                transaction.getName(),
+                transaction.getComment(),
+                Integer.toString(transaction.getAmount()),
+                Integer.toString(transaction.getType().getId()),
+                Integer.toString(transaction.getOccurrence().getId()),
+                transaction.getTransactionDate(),
+                Integer.toString(transaction.getCategory().getId())
+        };
+        return db.query("update.transaction", parameters).executeUpdate() > 0;
     }
 
     @Override
     public boolean deleteTransaction(int transactionId) {
-        return false;
+        return db.query("delete.transaction.by.id", new String[]{Integer.toString(transactionId)}).executeUpdate() > 0;
     }
 
     @Override
-    public boolean insertTransaction(Transaction transaction) {
-        return false;
+    public boolean insertTransaction(TransactionRequest transaction) {
+        String[] parameters = {
+                transaction.getName(),
+                transaction.getComment(),
+                Integer.toString(transaction.getAmount()),
+                Integer.toString(transaction.getTransactionTypeId()),
+                Integer.toString(transaction.getTransactionOccurrenceId()),
+                transaction.getTransactionDate(),
+                Integer.toString(transaction.getCategoryId()),
+                Integer.toString(transaction.getUserId())
+
+        };
+        return db.query("insert.transaction", parameters).executeUpdate() > 0;
     }
 
     @Override
     public List<Transaction> getAll() {
-        return null;
+        return createTransactions(db.query("select.all.transactions", null).execute());
     }
 
     @Override
     public List<Transaction> getAllIncome() {
-        return null;
+        return createTransactions(db.query("select.all.transactions.of.type", new String[]{"1"}).execute());
+
     }
 
     @Override
     public List<Transaction> getAllExpenses() {
-        return null;
+        return createTransactions(db.query("select.all.transactions.of.type", new String[]{"2"}).execute());
     }
 
     @Override

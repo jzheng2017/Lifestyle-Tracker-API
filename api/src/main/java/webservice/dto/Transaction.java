@@ -13,6 +13,9 @@ public class Transaction {
     private String createdAt;
     private String updatedAt;
 
+    public Transaction() {
+    }
+
     public Transaction(int id, String name, String comment, int amount, TransactionType type, int userId, Occurrence occurrence, String transactionDate, Category category, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
@@ -26,6 +29,7 @@ public class Transaction {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
+
 
     public String getUpdatedAt() {
         return updatedAt;

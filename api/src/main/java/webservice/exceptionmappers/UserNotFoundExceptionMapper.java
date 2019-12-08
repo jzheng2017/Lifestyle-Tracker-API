@@ -11,6 +11,6 @@ import javax.ws.rs.ext.Provider;
 public class UserNotFoundExceptionMapper implements ExceptionMapper<UserNotFoundException> {
     @Override
     public Response toResponse(UserNotFoundException e) {
-        return Response.status(Response.Status.NOT_FOUND).entity(new ExceptionMessage("test")).build();
+        return Response.status(Response.Status.NOT_FOUND).entity(new ExceptionMessage(e.getMessage())).build();
     }
 }

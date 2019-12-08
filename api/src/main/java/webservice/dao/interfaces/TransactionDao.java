@@ -1,6 +1,7 @@
 package webservice.dao.interfaces;
 
 import webservice.dto.Transaction;
+import webservice.dto.TransactionRequest;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface TransactionDao {
 
     boolean deleteTransaction(int transactionId);
 
-    boolean insertTransaction(Transaction transaction);
+    boolean insertTransaction(TransactionRequest transaction);
 
     List<Transaction> getAll();
 

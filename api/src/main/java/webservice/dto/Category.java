@@ -7,6 +7,8 @@ public class Category {
     private String createdAt;
     private String updatedAt;
 
+    public Category(){}
+
     public Category(int id, String name, int parentId, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
@@ -16,6 +18,9 @@ public class Category {
     }
 
     public Category(int categoryId, String categoryName, int parentId) {
+        this.id = categoryId;
+        this.name = categoryName;
+        this.parentId = parentId;
     }
 
     public String getName() {

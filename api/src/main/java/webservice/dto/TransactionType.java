@@ -4,6 +4,8 @@ public class TransactionType {
     private int id;
     private String type;
 
+    public TransactionType(){}
+
     public TransactionType(int id, String type) {
         this.id = id;
         this.type = type;
