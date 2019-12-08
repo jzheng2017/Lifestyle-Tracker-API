@@ -41,6 +41,9 @@ public class Transaction {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @OneToMany
+    private TransactionType transactionType;
+
     public int getId() {
         return id;
     }
