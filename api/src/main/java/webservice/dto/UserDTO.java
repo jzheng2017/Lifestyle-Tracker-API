@@ -1,6 +1,6 @@
 package webservice.dto;
 
-public class User {
+public class UserDTO {
     private int id;
     private String firstName;
     private String lastName;
@@ -9,10 +9,10 @@ public class User {
     private String createdAt;
     private String updatedAt;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(int id, String firstName, String lastName, String username, String email, String createdAt, String updatedAt) {
+    public UserDTO(int id, String firstName, String lastName, String username, String email, String createdAt, String updatedAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
