@@ -20,8 +20,8 @@ public class Transaction {
     @Column(name = "amount")
     private float amount;
 
-    @Column(name = "transaction_type_id")
-    private int transactionTypeId;
+//    @Column(name = "transaction_type_id")
+//    private int transactionTypeId;
 
     @Column(name = "occurrence_id")
     private int occurrenceId;
@@ -41,7 +41,7 @@ public class Transaction {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToMany
+    @ManyToOne
     private TransactionType transactionType;
 
     public int getId() {
@@ -76,13 +76,13 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public int getTransactionTypeId() {
-        return transactionTypeId;
-    }
-
-    public void setTransactionTypeId(int transactionTypeId) {
-        this.transactionTypeId = transactionTypeId;
-    }
+//    public int getTransactionTypeId() {
+//        return transactionTypeId;
+//    }
+//
+//    public void setTransactionTypeId(int transactionTypeId) {
+//        this.transactionTypeId = transactionTypeId;
+//    }
 
     public int getOccurrenceId() {
         return occurrenceId;

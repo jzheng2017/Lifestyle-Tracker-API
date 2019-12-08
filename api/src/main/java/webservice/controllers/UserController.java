@@ -42,7 +42,7 @@ public class UserController {
     }
 
     @PutMapping("update")
-    public ResponseEntity updateUser(UserDTO user) {
+    public ResponseEntity updateUser(@RequestBody UserDTO user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
 
@@ -53,15 +53,9 @@ public class UserController {
         return ResponseEntity.ok(transactionService.getAllTransactionsByUserId(userId));
     }
 
-    @GetMapping("{id}/transactions/expense")
-    public ResponseEntity getAllUserExpenses(@PathVariable("id") int userId) {
-        return ResponseEntity.ok(transactionService.getAllUserExpenses(userId));
-    }
-
-
-    @GetMapping("{id}/transactions/income")
-    public ResponseEntity getAllUserIncome(@PathVariable("id") int userId) {
-        return ResponseEntity.ok(transactionService.getAllUserIncome(userId));
+    @GetMapping("{id}/transactions/{type}")
+    public ResponseEntity getAllUserExpenses(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
+        return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
     }
 
 }

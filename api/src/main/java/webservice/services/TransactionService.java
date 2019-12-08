@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import webservice.dto.TransactionDTO;
 import webservice.dto.TransactionRequest;
 import webservice.entities.Transaction;
+import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionRepository;
 
 import java.util.List;
@@ -31,13 +32,10 @@ public class TransactionService {
         return transactionRepository.findAllByUserId(userId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
-    public List<TransactionDTO> getAllUserIncome(int userId) {
-        return null;
+    public List<TransactionDTO> getAllUserTransactionsByType(int userId, String type) {
+        return transactionRepository.findAllByUserIdAndTransactionType_Type(userId, type).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
-    public List<TransactionDTO> getAllUserExpenses(int userId) {
-        return null;
-    }
 
     public boolean deleteTransaction(int transactionId) {
         return false;
@@ -52,15 +50,11 @@ public class TransactionService {
     }
 
     public TransactionDTO getTransaction(int transactionId) {
-        return modelMapper.map(transactionRepository.findById(transactionId), TransactionDTO.class);
+        return modelMapper.map(transactionRepository.findById(transactionId).orElseThrow(() -> new ResourceNotFoundException("Transaction not found")), TransactionDTO.class);
     }
 
-    public List<TransactionDTO> getAllExpense() {
-        return null;
-    }
-
-    public List<TransactionDTO> getAllIncome() {
-        return null;
+    public List<TransactionDTO> getAllByType(String transactionType) {
+        return transactionRepository.findAllByTransactionType_Type(transactionType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
     public List<TransactionDTO> getAllTransactions() {

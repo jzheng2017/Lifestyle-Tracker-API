@@ -1,4 +1,5 @@
 package webservice.services;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +7,7 @@ import webservice.dto.UserDTO;
 import webservice.entities.User;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
+import webservice.util.Util;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,11 +38,20 @@ public class UserService {
         return modelMapper.map(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No user found")), UserDTO.class);
     }
 
+
     public UserDTO updateUser(UserDTO user) {
-        return null;
+        User existing = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
+        Util.copyNonNullProperties(user, existing);
+        return modelMapper.map(userRepository.save(existing), UserDTO.class);
     }
 
+
     public boolean deleteUser(int userId) {
-        return false;
+        if (userRepository.existsById(userId)) {
+            userRepository.deleteById(userId);
+            return true;
+        } else {
+            throw new ResourceNotFoundException("User can not be deleted. The given user does not exist.");
+        }
     }
 }

@@ -8,7 +8,7 @@ import webservice.dto.TransactionRequest;
 import webservice.services.TransactionService;
 
 @RestController
-@RequestMapping("/transaction")
+@RequestMapping("/transactions")
 public class TransactionController {
 
     private TransactionService transactionService;
@@ -23,14 +23,9 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
-    @GetMapping("/income/all")
-    public ResponseEntity getAllIncome(){
-        return ResponseEntity.ok(transactionService.getAllIncome());
-    }
-
-    @GetMapping("/expense/all")
-    public ResponseEntity getAllExpense(){
-        return ResponseEntity.ok(transactionService.getAllExpense());
+    @GetMapping("/{type}/all")
+    public ResponseEntity getAllTransactionsByType(@PathVariable("type") String transactionType){
+        return ResponseEntity.ok(transactionService.getAllByType(transactionType));
     }
 
     @GetMapping("{id}")

@@ -6,20 +6,16 @@ public class UserDTO {
     private String lastName;
     private String username;
     private String email;
-    private String createdAt;
-    private String updatedAt;
 
     public UserDTO() {
     }
 
-    public UserDTO(int id, String firstName, String lastName, String username, String email, String createdAt, String updatedAt) {
+    public UserDTO(int id, String firstName, String lastName, String username, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.email = email;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public int getId() {
@@ -52,22 +48,6 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public String getUsername() {
