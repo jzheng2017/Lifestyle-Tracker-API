@@ -36,7 +36,6 @@ public class UserService {
         return modelMapper.map(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No user found")), UserDTO.class);
     }
 
-
     public UserDTO updateUser(UserDTO user) {
         return null;
     }
