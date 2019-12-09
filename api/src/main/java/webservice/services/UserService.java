@@ -3,6 +3,7 @@ package webservice.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webservice.dto.CredentialDTO;
 import webservice.dto.RegistrationDTO;
 import webservice.dto.UserDTO;
 import webservice.entities.User;
@@ -57,6 +58,10 @@ public class UserService {
     }
 
     public UserDTO addUser(RegistrationDTO user) {
+        return null;
+    }
+
+    public String authenticateUser(CredentialDTO credentials) {
         return null;
     }
 }

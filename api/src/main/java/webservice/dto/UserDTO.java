@@ -1,7 +1,7 @@
 package webservice.dto;
 
 public class UserDTO {
-    private int id;
+    private Integer id;
     private String firstName;
     private String lastName;
     private String username;
@@ -18,11 +18,11 @@ public class UserDTO {
         this.email = email;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

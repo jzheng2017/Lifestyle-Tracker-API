@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public class TransactionDTO {
-    private int id;
+    private Integer id;
     private String transactionName;
     private String comment;
     private float amount;
@@ -32,11 +32,11 @@ public class TransactionDTO {
         this.user = user;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

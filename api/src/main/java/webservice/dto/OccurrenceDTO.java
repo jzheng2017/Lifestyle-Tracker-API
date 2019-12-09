@@ -1,7 +1,7 @@
 package webservice.dto;
 
 public class OccurrenceDTO {
-    private int id;
+    private Integer id;
     private String name;
 
     public OccurrenceDTO(){}
@@ -18,11 +18,11 @@ public class OccurrenceDTO {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

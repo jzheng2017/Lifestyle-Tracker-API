@@ -1,7 +1,8 @@
 package webservice.entities;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,28 +11,28 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "category_name")
     private String name;
 
     @Column(name = "parent_id")
-    @Null
-    private int parentId;
+    @Nullable
+    private Integer parentId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @Null
+    @Nullable
     private LocalDateTime updatedAt;
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -43,11 +44,11 @@ public class Category {
         this.name = name;
     }
 
-    public int getParentId() {
+    public Integer getParentId() {
         return parentId;
     }
 
-    public void setParentId(int parentId) {
+    public void setParentId(Integer parentId) {
         this.parentId = parentId;
     }
 

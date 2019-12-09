@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class TransactionType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "type_name")
     private String type;
@@ -20,11 +20,11 @@ public class TransactionType {
         this.type = type;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 }

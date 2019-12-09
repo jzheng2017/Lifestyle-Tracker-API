@@ -29,9 +29,6 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-jcl:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.25" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-json:2.2.1.RELEASE" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.0" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.0" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.10.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.10.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.module:jackson-module-parameter-names:2.10.0" />
@@ -80,6 +77,10 @@
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.29" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aspects:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.modelmapper:modelmapper:2.3.0" />
+          <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt:0.9.1" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.0" />
         </element>
       </element>
       <element id="directory" name="META-INF">

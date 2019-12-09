@@ -1,8 +1,8 @@
 package webservice.entities;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,34 +11,28 @@ public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "first_name")
-    @NotNull
     private String firstName;
 
     @Column(name = "last_name")
-    @NotNull
     private String lastName;
 
     @Column(name = "username")
-    @NotNull
     private String username;
 
     @Column(name = "password")
-    @NotNull
     private String password;
 
     @Column(name = "email")
-    @NotNull
     private String email;
 
     @Column(name = "created_at")
-    @NotNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    @Null
+    @Nullable
     private LocalDateTime updatedAt;
 
     public Integer getId() {

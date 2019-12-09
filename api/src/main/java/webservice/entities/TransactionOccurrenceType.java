@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class TransactionOccurrenceType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "occurrence_name")
     private String name;
@@ -20,7 +20,7 @@ public class TransactionOccurrenceType {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 }

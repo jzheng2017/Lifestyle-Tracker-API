@@ -45,7 +45,6 @@ public class TransactionService {
     }
 
     public TransactionDTO insertTransaction(TransactionDTO transaction) {
-        System.out.println("test");
         return modelMapper.map(transactionRepository.save(modelMapper.map(transaction, Transaction.class)), TransactionDTO.class);
     }
 
@@ -59,5 +58,9 @@ public class TransactionService {
 
     public List<TransactionDTO> getAllTransactions() {
         return ((List<Transaction>) transactionRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    }
+
+    public List<TransactionDTO> getAllUserTransactionsByCategory(int userId, int categoryId) {
+        return transactionRepository.findAllByUserIdAndCategoryId(userId, categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 }

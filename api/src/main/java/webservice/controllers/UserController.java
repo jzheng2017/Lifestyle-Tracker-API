@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addUser(@RequestBody RegistrationDTO user){
+    public ResponseEntity addUser(@RequestBody RegistrationDTO user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
 
@@ -62,6 +62,11 @@ public class UserController {
     @GetMapping("{id}/transactions/{type}")
     public ResponseEntity getAllUserExpenses(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
+    }
+
+    @GetMapping("{userId}/transactions/category/{categoryId}")
+    public ResponseEntity getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
+        return ResponseEntity.ok(transactionService.getAllUserTransactionsByCategory(userId, categoryId));
     }
 
 }
