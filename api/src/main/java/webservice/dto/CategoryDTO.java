@@ -1,15 +1,19 @@
 package webservice.dto;
 
+import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
+
 public class CategoryDTO {
     private Integer id;
+    @NotEmpty(message = "Category name can not be empty")
     private String name;
     private Integer parentId;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public CategoryDTO(){}
 
-    public CategoryDTO(Integer id, String name, Integer parentId, String createdAt, String updatedAt) {
+    public CategoryDTO(Integer id, String name, Integer parentId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
@@ -47,19 +51,19 @@ public class CategoryDTO {
         this.id = id;
     }
 
-    public String getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(String createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public String getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(String updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }
