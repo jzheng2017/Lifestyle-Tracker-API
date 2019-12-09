@@ -1,13 +1,20 @@
 package webservice.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class UserDTO {
     private Integer id;
+    @NotEmpty(message = "First name can not be empty")
     private String firstName;
+    @NotEmpty(message = "Last name can not be empty")
     private String lastName;
-    @Size(min = 3, message = "Username must have at least 3 characters.")
+    @Size(min = 3, max = 30, message = "Username must be between 3 and 30 characters.")
     private String username;
+    @Email(message = "Email is not a valid email")
+    @NotEmpty(message = "Email can not be empty")
     private String email;
 
     public UserDTO() {
