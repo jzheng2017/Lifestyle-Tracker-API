@@ -1,9 +1,12 @@
 package webservice.dto;
 
+import javax.validation.constraints.Size;
+
 public class UserDTO {
     private Integer id;
     private String firstName;
     private String lastName;
+    @Size(min = 3, message = "Username must have at least 3 characters.")
     private String username;
     private String email;
 

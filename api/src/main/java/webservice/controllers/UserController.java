@@ -8,6 +8,8 @@ import webservice.dto.UserDTO;
 import webservice.services.TransactionService;
 import webservice.services.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -43,7 +45,7 @@ public class UserController {
     }
 
     @PutMapping("update")
-    public ResponseEntity updateUser(@RequestBody UserDTO user) {
+    public ResponseEntity updateUser(@Valid @RequestBody UserDTO user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
 
