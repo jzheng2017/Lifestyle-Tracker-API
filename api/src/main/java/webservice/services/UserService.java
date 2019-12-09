@@ -3,6 +3,7 @@ package webservice.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webservice.dto.Registration;
 import webservice.dto.UserDTO;
 import webservice.entities.User;
 import webservice.exceptions.ResourceNotFoundException;
@@ -53,5 +54,9 @@ public class UserService {
         } else {
             throw new ResourceNotFoundException("User can not be deleted. The given user does not exist.");
         }
+    }
+
+    public UserDTO addUser(Registration user) {
+        return null;
     }
 }
