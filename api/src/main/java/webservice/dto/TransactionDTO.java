@@ -1,5 +1,7 @@
 package webservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.LocalDateTime;
 
 public class TransactionDTO {
@@ -7,26 +9,27 @@ public class TransactionDTO {
     private String transactionName;
     private String comment;
     private float amount;
-    private int transactionTypeId;
-    private int occurrenceId;
+    private TransactionTypeDTO type;
+    private OccurrenceDTO occurrence;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime transactionDate;
-    private int categoryId;
-    private int userId;
+    private CategoryDTO category;
+    private UserDTO user;
 
     public TransactionDTO(){
 
     }
 
-    public TransactionDTO(int id, String transactionName, String comment, float amount, int transactionTypeId, int occurenceId, LocalDateTime transactionDate, int categoryId, int userId) {
+    public TransactionDTO(int id, String transactionName, String comment, float amount, TransactionTypeDTO type, OccurrenceDTO occurrenceDTO, LocalDateTime transactionDate, CategoryDTO categoryDTO, UserDTO user) {
         this.id = id;
         this.transactionName = transactionName;
         this.comment = comment;
         this.amount = amount;
-        this.transactionTypeId = transactionTypeId;
-        this.occurrenceId = occurenceId;
+        this.type = type;
+        this.occurrence = occurrenceDTO;
         this.transactionDate = transactionDate;
-        this.categoryId = categoryId;
-        this.userId = userId;
+        this.category = categoryDTO;
+        this.user = user;
     }
 
     public int getId() {
@@ -61,20 +64,12 @@ public class TransactionDTO {
         this.amount = amount;
     }
 
-    public int getTransactionTypeId() {
-        return transactionTypeId;
+    public OccurrenceDTO getOccurrence() {
+        return occurrence;
     }
 
-    public void setTransactionTypeId(int transactionTypeId) {
-        this.transactionTypeId = transactionTypeId;
-    }
-
-    public int getOccurrenceId() {
-        return occurrenceId;
-    }
-
-    public void setOccurrenceId(int occurrenceId) {
-        this.occurrenceId = occurrenceId;
+    public void setOccurrence(OccurrenceDTO occurrenceDTO) {
+        this.occurrence = occurrenceDTO;
     }
 
     public LocalDateTime getTransactionDate() {
@@ -85,19 +80,27 @@ public class TransactionDTO {
         this.transactionDate = transactionDate;
     }
 
-    public int getCategoryId() {
-        return categoryId;
+    public CategoryDTO getCategory() {
+        return category;
     }
 
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(CategoryDTO categoryDTO) {
+        this.category = categoryDTO;
     }
 
-    public int getUserId() {
-        return userId;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(UserDTO user) {
+        this.user = user;
+    }
+
+    public TransactionTypeDTO getType() {
+        return type;
+    }
+
+    public void setType(TransactionTypeDTO type) {
+        this.type = type;
     }
 }

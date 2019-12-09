@@ -1,6 +1,7 @@
 package webservice.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,12 +16,14 @@ public class Category {
     private String name;
 
     @Column(name = "parent_id")
+    @Null
     private int parentId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @Null
     private LocalDateTime updatedAt;
 
 

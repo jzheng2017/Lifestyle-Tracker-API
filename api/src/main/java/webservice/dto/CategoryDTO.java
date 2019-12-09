@@ -1,15 +1,15 @@
 package webservice.dto;
 
-public class Category {
+public class CategoryDTO {
     private int id;
     private String name;
     private int parentId;
     private String createdAt;
     private String updatedAt;
 
-    public Category(){}
+    public CategoryDTO(){}
 
-    public Category(int id, String name, int parentId, String createdAt, String updatedAt) {
+    public CategoryDTO(int id, String name, int parentId, String createdAt, String updatedAt) {
         this.id = id;
         this.name = name;
         this.parentId = parentId;
@@ -17,7 +17,7 @@ public class Category {
         this.updatedAt = updatedAt;
     }
 
-    public Category(int categoryId, String categoryName, int parentId) {
+    public CategoryDTO(int categoryId, String categoryName, int parentId) {
         this.id = categoryId;
         this.name = categoryName;
         this.parentId = parentId;

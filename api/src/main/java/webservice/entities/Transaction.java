@@ -12,7 +12,7 @@ public class Transaction {
     private int id;
 
     @Column(name = "transaction_name")
-    private String transactionName;
+    private String name;
 
     @Column(name = "comment")
     private String comment;
@@ -20,20 +20,8 @@ public class Transaction {
     @Column(name = "amount")
     private float amount;
 
-//    @Column(name = "transaction_type_id")
-//    private int transactionTypeId;
-
-    @Column(name = "occurrence_id")
-    private int occurrenceId;
-
     @Column(name = "transaction_date")
     private LocalDateTime transactionDate;
-
-    @Column(name = "category_id")
-    private int categoryId;
-
-    @Column(name = "user_id")
-    private int userId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -44,6 +32,15 @@ public class Transaction {
     @ManyToOne
     private TransactionType transactionType;
 
+    @ManyToOne
+    private Category category;
+
+    @ManyToOne
+    private User user;
+
+    @ManyToOne
+    private TransactionOccurrenceType occurrence;
+
     public int getId() {
         return id;
     }
@@ -52,12 +49,12 @@ public class Transaction {
         this.id = id;
     }
 
-    public String getTransactionName() {
-        return transactionName;
+    public String getName() {
+        return name;
     }
 
-    public void setTransactionName(String transactionName) {
-        this.transactionName = transactionName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getComment() {
@@ -76,44 +73,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-//    public int getTransactionTypeId() {
-//        return transactionTypeId;
-//    }
-//
-//    public void setTransactionTypeId(int transactionTypeId) {
-//        this.transactionTypeId = transactionTypeId;
-//    }
-
-    public int getOccurrenceId() {
-        return occurrenceId;
-    }
-
-    public void setOccurrenceId(int occurrenceId) {
-        this.occurrenceId = occurrenceId;
-    }
-
     public LocalDateTime getTransactionDate() {
         return transactionDate;
     }
 
     public void setTransactionDate(LocalDateTime transactionDate) {
         this.transactionDate = transactionDate;
-    }
-
-    public int getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -132,4 +97,35 @@ public class Transaction {
         this.updatedAt = updatedAt;
     }
 
+    public TransactionType getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(TransactionType transactionType) {
+        this.transactionType = transactionType;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public TransactionOccurrenceType getOccurrence() {
+        return occurrence;
+    }
+
+    public void setOccurrence(TransactionOccurrenceType occurrence) {
+        this.occurrence = occurrence;
+    }
 }

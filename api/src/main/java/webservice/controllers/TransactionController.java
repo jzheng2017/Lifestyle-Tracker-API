@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webservice.dto.TransactionDTO;
-import webservice.dto.TransactionRequest;
 import webservice.services.TransactionService;
 
 @RestController
@@ -33,13 +32,13 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getTransaction(transactionId));
     }
 
-    @PostMapping
-    public ResponseEntity addTransaction(TransactionRequest transaction) {
+    @PostMapping("/create")
+    public ResponseEntity addTransaction(@RequestBody TransactionDTO transaction) {
         return ResponseEntity.ok(transactionService.insertTransaction(transaction));
     }
 
     @PutMapping
-    public ResponseEntity updateTransaction(TransactionDTO transaction){
+    public ResponseEntity updateTransaction(@RequestBody TransactionDTO transaction){
         return ResponseEntity.ok(transactionService.updateTransaction(transaction));
     }
 

@@ -1,12 +1,12 @@
 package webservice.dto;
 
-public class TransactionType {
+public class TransactionTypeDTO {
     private int id;
     private String type;
 
-    public TransactionType(){}
+    public TransactionTypeDTO(){}
 
-    public TransactionType(int id, String type) {
+    public TransactionTypeDTO(int id, String type) {
         this.id = id;
         this.type = type;
     }

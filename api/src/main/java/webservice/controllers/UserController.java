@@ -3,7 +3,7 @@ package webservice.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import webservice.dto.Registration;
+import webservice.dto.RegistrationDTO;
 import webservice.dto.UserDTO;
 import webservice.services.TransactionService;
 import webservice.services.UserService;
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addUser(@RequestBody Registration user){
+    public ResponseEntity addUser(@RequestBody RegistrationDTO user){
         return ResponseEntity.ok(userService.addUser(user));
     }
 

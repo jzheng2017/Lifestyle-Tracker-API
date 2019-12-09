@@ -4,7 +4,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.dto.TransactionDTO;
-import webservice.dto.TransactionRequest;
 import webservice.entities.Transaction;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionRepository;
@@ -45,8 +44,9 @@ public class TransactionService {
         return null;
     }
 
-    public TransactionDTO insertTransaction(TransactionRequest transaction) {
-        return null;
+    public TransactionDTO insertTransaction(TransactionDTO transaction) {
+        System.out.println("test");
+        return modelMapper.map(transactionRepository.save(modelMapper.map(transaction, Transaction.class)), TransactionDTO.class);
     }
 
     public TransactionDTO getTransaction(int transactionId) {
