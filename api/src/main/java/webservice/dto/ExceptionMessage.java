@@ -3,30 +3,30 @@ package webservice.dto;
 import java.time.LocalDateTime;
 
 public class ExceptionMessage {
-    private int errorCode;
-    private String errorMessage;
+    private int code;
+    private String error;
     private LocalDateTime timestamp;
 
-    public ExceptionMessage(int errorCode, String message, LocalDateTime timestamp) {
-        this.errorCode = errorCode;
-        this.errorMessage = message;
+    public ExceptionMessage(int code, String error, LocalDateTime timestamp) {
+        this.code = code;
+        this.error = error;
         this.timestamp = timestamp;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getError() {
+        return error;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setError(String error) {
+        this.error = error;
     }
 
-    public int getErrorCode() {
-        return errorCode;
+    public int getCode() {
+        return code;
     }
 
-    public void setErrorCode(int errorCode) {
-        this.errorCode = errorCode;
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public LocalDateTime getTimestamp() {

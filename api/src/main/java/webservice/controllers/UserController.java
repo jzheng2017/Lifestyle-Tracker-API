@@ -50,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity addUser(@RequestBody RegistrationDTO user) {
+    public ResponseEntity addUser(@Valid @RequestBody RegistrationDTO user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
 

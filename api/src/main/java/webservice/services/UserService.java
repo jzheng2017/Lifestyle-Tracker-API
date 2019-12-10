@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.dto.CredentialDTO;
 import webservice.dto.RegistrationDTO;
+import webservice.dto.TokenDTO;
 import webservice.dto.UserDTO;
 import webservice.entities.User;
 import webservice.exceptions.ResourceNotFoundException;
@@ -58,10 +59,10 @@ public class UserService {
     }
 
     public UserDTO addUser(RegistrationDTO user) {
-        return null;
+        return modelMapper.map(userRepository.save(modelMapper.map(user, User.class)), UserDTO.class);
     }
 
-    public String authenticateUser(CredentialDTO credentials) {
-        return null;
+    public TokenDTO authenticateUser(CredentialDTO credentials) {
+        return new TokenDTO("1");
     }
 }
