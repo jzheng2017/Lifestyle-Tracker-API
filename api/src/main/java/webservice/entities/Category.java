@@ -3,6 +3,7 @@ package webservice.entities;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,6 +15,7 @@ public class Category {
     private Integer id;
 
     @Column(name = "category_name")
+    @NotNull
     private String name;
 
     @Column(name = "parent_id")
@@ -21,6 +23,7 @@ public class Category {
     private Integer parentId;
 
     @Column(name = "created_at")
+    @NotNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")

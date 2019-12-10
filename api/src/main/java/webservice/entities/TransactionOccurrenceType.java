@@ -1,6 +1,7 @@
 package webservice.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "transaction_occurrence_types")
@@ -10,6 +11,7 @@ public class TransactionOccurrenceType {
     private Integer id;
 
     @Column(name = "occurrence_name")
+    @NotNull
     private String name;
 
     public String getName() {

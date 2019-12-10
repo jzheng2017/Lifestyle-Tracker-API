@@ -1,6 +1,7 @@
 package webservice.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,33 +13,42 @@ public class Transaction {
     private int id;
 
     @Column(name = "transaction_name")
+    @NotNull
     private String name;
 
     @Column(name = "comment")
+    @NotNull
     private String comment;
 
     @Column(name = "amount")
+    @NotNull
     private float amount;
 
     @Column(name = "transaction_date")
+    @NotNull
     private LocalDateTime transactionDate;
 
     @Column(name = "created_at")
+    @NotNull
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne
+    @NotNull
     private TransactionType transactionType;
 
     @ManyToOne
+    @NotNull
     private Category category;
 
     @ManyToOne
+    @NotNull
     private User user;
 
     @ManyToOne
+    @NotNull
     private TransactionOccurrenceType occurrence;
 
     public int getId() {
