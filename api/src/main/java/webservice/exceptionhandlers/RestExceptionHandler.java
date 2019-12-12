@@ -12,6 +12,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import webservice.dto.ExceptionMessage;
 import webservice.exceptions.ResourceNotFoundException;
+import webservice.exceptions.UnauthorizedActionException;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -27,6 +28,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity handleEntityNotFound(ResourceNotFoundException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionMessage(404, ex.getMessage(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(UnauthorizedActionException.class)
+    public ResponseEntity handleUnauthorizedAction(UnauthorizedActionException ex){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionMessage(401, ex.getMessage(), LocalDateTime.now()));
     }
 
     @Override
