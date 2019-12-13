@@ -34,9 +34,8 @@ public class AuthenticateService {
 
     public TokenDTO authenticateUser(CredentialDTO credentials) {
         User user = userRepository.findByUsername(credentials.getUsername()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-        return new TokenDTO(Jwts.builder().setSubject(keyService.ConvertSecretKeyToString(key)).signWith(key).compact());
+        return new TokenDTO(Jwts.builder().setSubject(user.getId().toString()).signWith(keyService.getSecretKey()).compact());
     }
 
     public Boolean authenticateToken(String token) {
