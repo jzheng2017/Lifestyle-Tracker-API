@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "transaction_occurrence_types")
 public class TransactionOccurrenceType {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "occurrence_name")
