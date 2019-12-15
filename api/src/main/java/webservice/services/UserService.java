@@ -1,26 +1,16 @@
 package webservice.services;
-
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import webservice.dto.CredentialDTO;
 import webservice.dto.RegistrationDTO;
-import webservice.dto.TokenDTO;
 import webservice.dto.UserDTO;
 import webservice.entities.User;
 import webservice.exceptions.DuplicateEntryException;
-import webservice.exceptions.ResourceNotFoundException;
-import webservice.exceptions.UnauthorizedActionException;
+import webservice.exceptions.ResourceNotFoundException;\
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.Util;
-
-import java.security.Key;
-import java.util.Base64;
+\
 import java.util.List;
 import java.util.stream.Collectors;
 

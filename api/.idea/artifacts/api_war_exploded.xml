@@ -42,7 +42,6 @@
           <element id="library" level="project" name="Maven: org.springframework:spring-web:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:5.2.1.RELEASE" />
-          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-context:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-expression:5.2.1.RELEASE" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:8.0.15" />
@@ -83,6 +82,11 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.0" />
+          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-security:2.2.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework:spring-aop:5.2.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-config:5.2.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-core:5.2.1.RELEASE" />
+          <element id="library" level="project" name="Maven: org.springframework.security:spring-security-web:5.2.1.RELEASE" />
         </element>
       </element>
       <element id="directory" name="META-INF">
