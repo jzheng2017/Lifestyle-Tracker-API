@@ -36,15 +36,29 @@ public class UserService {
         this.hashService = hashService;
     }
 
+    /**
+     * Gets all users
+     * @return list of all users
+     */
     public List<UserDTO> getAllUsers() {
         return ((List<User>) userRepository.findAll()).stream().map(entity -> modelMapper.map(entity, UserDTO.class)).collect(Collectors.toList());
     }
 
-    public UserDTO getUser(int id) {
-        return modelMapper.map(userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No user found")), UserDTO.class);
+    /**
+     * Get a specific user by id
+     * @param userId the id of a user
+     * @return user
+     */
+    public UserDTO getUser(int userId) {
+        return modelMapper.map(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found")), UserDTO.class);
     }
 
 
+    /**
+     * Update the user
+     * @param user user object with new values
+     * @return updated user
+     */
     public UserDTO updateUser(UserDTO user) {
         User existing = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
         Util.copyNonNullProperties(user, existing);
@@ -52,6 +66,11 @@ public class UserService {
     }
 
 
+    /**
+     * Delete user by id
+     * @param userId the id of a user
+     * @return deleted or not of type boolean
+     */
     public boolean deleteUser(int userId) {
         if (userRepository.existsById(userId)) {
             userRepository.deleteById(userId);
@@ -61,6 +80,11 @@ public class UserService {
         }
     }
 
+    /**
+     * Add user
+     * @param user registration values
+     * @return object of the added user
+     */
     public UserDTO addUser(RegistrationDTO user) {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new DuplicateEntryException("Username already exists");

@@ -37,6 +37,11 @@ public class AuthenticateService {
         this.hashService = hashService;
     }
 
+    /**
+     * Authenticate the user
+     * @param credentials credentials of the user
+     * @return user token if authentication successful
+     */
     public TokenDTO authenticateUser(CredentialDTO credentials) {
         User user = userRepository.findByUsername(credentials.getUsername()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         if (!hashService.valid(credentials.getPassword(), user.getPassword())) { //checks for validity of password

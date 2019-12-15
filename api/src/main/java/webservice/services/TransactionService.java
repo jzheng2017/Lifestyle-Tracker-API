@@ -27,39 +27,85 @@ public class TransactionService {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Get all transactions by user id
+     * @param userId the id of a user
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllTransactionsByUserId(int userId) {
         return transactionRepository.findAllByUserId(userId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Get all transactions by user id of specific transaction type
+     * @param userId the id of a user
+     * @param type type of a transaction (ex. income)
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllUserTransactionsByType(int userId, String type) {
         return transactionRepository.findAllByUserIdAndTransactionType_Type(userId, type).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
 
+    /**
+     * Delete transaction by id
+     * @param transactionId the id of the transaction
+     * @return deleted or not of type boolean
+     */
     public boolean deleteTransaction(int transactionId) {
         return false;
     }
 
+    /**
+     * Update the transaction
+     * @param transaction transaction object containing the new values
+     * @return the updated transaction
+     */
     public TransactionDTO updateTransaction(TransactionDTO transaction) {
         return null;
     }
 
+    /**
+     * Add a new transaction
+     * @param transaction transaction object to be added
+     * @return transaction object that has been added
+     */
     public TransactionDTO insertTransaction(TransactionDTO transaction) {
         return modelMapper.map(transactionRepository.save(modelMapper.map(transaction, Transaction.class)), TransactionDTO.class);
     }
 
+    /**
+     * Get a specific transaction by id
+     * @param transactionId the id of a transaction
+     * @return a transaction object
+     */
     public TransactionDTO getTransaction(int transactionId) {
         return modelMapper.map(transactionRepository.findById(transactionId).orElseThrow(() -> new ResourceNotFoundException("Transaction not found")), TransactionDTO.class);
     }
 
+    /**
+     * Get all transactions by type
+     * @param transactionType type of a transaction (ex. income)
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllByType(String transactionType) {
         return transactionRepository.findAllByTransactionType_Type(transactionType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Get all transactions
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllTransactions() {
         return ((List<Transaction>) transactionRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Get all transactions by user id of a specific category
+     * @param userId the id of a user
+     * @param categoryId the id of a category
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllUserTransactionsByCategory(int userId, int categoryId) {
         return transactionRepository.findAllByUserIdAndCategoryId(userId, categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
