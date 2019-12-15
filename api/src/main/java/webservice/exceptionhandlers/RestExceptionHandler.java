@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import webservice.dto.ExceptionMessage;
+import webservice.exceptions.BadCredentialsException;
+import webservice.exceptions.DuplicateEntryException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.exceptions.UnauthorizedActionException;
 
@@ -34,6 +36,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity handleUnauthorizedAction(UnauthorizedActionException ex){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionMessage(401, ex.getMessage(), LocalDateTime.now()));
     }
+
+    @ExceptionHandler(DuplicateEntryException.class)
+    public ResponseEntity handleDuplicateEntry(DuplicateEntryException ex){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(409, ex.getMessage(), LocalDateTime.now()));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity handleBadCredentials(BadCredentialsException ex){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionMessage(403, ex.getMessage(), LocalDateTime.now()));
+    }
+
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

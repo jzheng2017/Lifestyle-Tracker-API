@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import webservice.dto.CredentialDTO;
 import webservice.dto.TokenDTO;
 import webservice.entities.User;
+import webservice.exceptions.BadCredentialsException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.exceptions.UnauthorizedActionException;
 import webservice.repositories.UserRepository;
+import webservice.services.interfaces.HashService;
 
 import java.security.Key;
 
@@ -20,7 +22,7 @@ public class AuthenticateService {
 
     private UserRepository userRepository;
     private KeyService keyService;
-
+    private HashService hashService;
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -32,9 +34,16 @@ public class AuthenticateService {
         this.keyService = keyService;
     }
 
+    @Autowired
+    public void setHashService(HashService hashService) {
+        this.hashService = hashService;
+    }
+
     public TokenDTO authenticateUser(CredentialDTO credentials) {
         User user = userRepository.findByUsername(credentials.getUsername()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
+        if (!hashService.valid(credentials.getPassword(), user.getPassword())) { //checks for validity of password
+            throw new BadCredentialsException("Invalid login information");
+        }
         return new TokenDTO(Jwts.builder().setSubject(user.getId().toString()).signWith(keyService.getSecretKey()).compact());
     }
 
@@ -47,5 +56,6 @@ public class AuthenticateService {
             throw new UnauthorizedActionException("Token invalid");
         }
     }
+
 
 }
