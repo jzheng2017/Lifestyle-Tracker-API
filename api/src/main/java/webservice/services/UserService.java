@@ -6,11 +6,10 @@ import webservice.dto.RegistrationDTO;
 import webservice.dto.UserDTO;
 import webservice.entities.User;
 import webservice.exceptions.DuplicateEntryException;
-import webservice.exceptions.ResourceNotFoundException;\
+import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.Util;
-\
 import java.util.List;
 import java.util.stream.Collectors;
 
