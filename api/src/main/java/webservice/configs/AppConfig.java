@@ -6,11 +6,15 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource("classpath:config.properties")
-public class KeyConfig {
+public class AppConfig {
     @Value("${secret}")
     private String secret;
+    @Value("${expiration}")
+    private String expiration;
 
     public String getSecret() {
         return secret;
     }
+
+    public String getExpiration(){return expiration;}
 }
