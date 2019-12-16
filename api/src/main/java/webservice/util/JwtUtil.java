@@ -52,6 +52,18 @@ public class JwtUtil {
                 .compact();
     }
 
+    public String generateToken(String subject) {
+        final int expiration = appConfigService.getTokenExpiration();
+        final Date now = new Date();
+        final long expirationInSeconds = now.getTime() + expiration * 1000;
+        final Date expirationDate = new Date(expirationInSeconds);
+        return Jwts.builder()
+                .setSubject(subject)
+                .setExpiration(expirationDate)
+                .signWith(keyService.getSecretKey())
+                .compact();
+    }
+
     public Claims getBodyFromToken(String token) {
         return Jwts.parser().setSigningKey(keyService.getSecretKey()).parseClaimsJws(token).getBody();
     }
@@ -60,5 +72,6 @@ public class JwtUtil {
         final Date expiration = getBodyFromToken(token).getExpiration();
         return expiration.before(new Date());
     }
+
 
 }
