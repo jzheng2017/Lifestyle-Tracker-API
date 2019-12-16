@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import webservice.dto.CategoryDTO;
 import webservice.services.CategoryService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/category")
 public class CategoryController {
@@ -33,13 +35,18 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getChildren(parentId));
     }
 
-    @PostMapping("create")
-    public ResponseEntity createCategory(@RequestBody CategoryDTO categoryDTO) {
+    @PostMapping("/create")
+    public ResponseEntity createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
     }
 
-    @PutMapping("update")
-    public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO) {
+    @PutMapping("/update")
+    public ResponseEntity updateCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteCategory(@PathVariable("id") int categoryId) {
+        return ResponseEntity.ok(categoryService.deleteCategory(categoryId));
     }
 }

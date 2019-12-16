@@ -83,6 +83,21 @@ public class CategoryService {
     }
 
     /**
+     * Delete a category by id
+     *
+     * @param categoryId the id of a category
+     * @return whether is has been deleted or not
+     */
+    public boolean deleteCategory(int categoryId) {
+        if (categoryRepository.existsById(categoryId)) {
+            categoryRepository.deleteById(categoryId);
+            return true;
+        } else {
+            throw new ResourceNotFoundException("Category does not exist");
+        }
+    }
+
+    /**
      * Adds or update a category
      *
      * @param categoryDTO a category
