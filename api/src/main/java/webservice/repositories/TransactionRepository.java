@@ -17,5 +17,7 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
 
     List<Transaction> findAllByUserIdAndTransactionType_Type(int userId, String type);
 
+    List<Transaction> findAllByUserIdAndOccurrence_Name(int userId, String occurence);
+
     List<Transaction> findAllByUserIdAndCategoryId(int userId, int categoryId);
 }

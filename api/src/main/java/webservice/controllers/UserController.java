@@ -61,12 +61,17 @@ public class UserController {
         return ResponseEntity.ok(transactionService.getAllTransactionsByUserId(userId));
     }
 
-    @GetMapping("{id}/transactions/{type}")
-    public ResponseEntity getAllUserExpenses(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
+    @GetMapping("{id}/transactions/type/{type}/all")
+    public ResponseEntity getAllUserTransactionsByType(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
     }
 
-    @GetMapping("{userId}/transactions/category/{categoryId}")
+    @GetMapping("{id}/transactions/occurrence/{occurrence}/all")
+    public ResponseEntity getAllUserTransactionsByOccurrence(@PathVariable("id") int userId, @PathVariable("occurrence") String occurrenceType) {
+        return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurence(userId, occurrenceType));
+    }
+
+    @GetMapping("{userId}/transactions/category/{categoryId}/all")
     public ResponseEntity getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByCategory(userId, categoryId));
     }
