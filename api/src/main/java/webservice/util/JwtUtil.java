@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.services.AppConfigService;
 import webservice.services.KeyService;
-
 import java.util.Date;
 
 @Service
@@ -32,19 +31,6 @@ public class JwtUtil {
         final Date now = new Date();
         final long expirationInSeconds = now.getTime() + expiration * 1000;
         final Date expirationDate = new Date(expirationInSeconds);
-        return Jwts.builder()
-                .setSubject(subject)
-                .setExpiration(expirationDate)
-                .signWith(keyService.getSecretKey())
-                .compact();
-    }
-
-    public String generateToken(String subject) {
-        final int expiration = appConfigService.getTokenExpiration();
-        final Date now = new Date();
-        final long expirationInSeconds = now.getTime() + expiration * 1000;
-        final Date expirationDate = new Date(expirationInSeconds);
-
         return Jwts.builder()
                 .setSubject(subject)
                 .setExpiration(expirationDate)

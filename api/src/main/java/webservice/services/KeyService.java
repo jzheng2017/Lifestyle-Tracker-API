@@ -12,11 +12,11 @@ import java.util.Base64;
 @Service
 public class KeyService {
 
-    private AppConfig appConfig;
+    private AppConfig keyConfig;
 
     @Autowired
-    public void setAppConfig(AppConfig appConfig) {
-        this.appConfig = appConfig;
+    public void setKeyConfig(AppConfig keyConfig) {
+        this.keyConfig = keyConfig;
     }
 
     /**
@@ -42,7 +42,7 @@ public class KeyService {
      * @return a key
      */
     public Key getSecretKey(){
-        return ConvertStringToSecretKey(appConfig.getSecret());
+        return ConvertStringToSecretKey(keyConfig.getSecret());
     }
 
 }
