@@ -22,9 +22,14 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
-    @GetMapping("/{type}/all")
+    @GetMapping("/type/{type}/all")
     public ResponseEntity getAllTransactionsByType(@PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllByType(transactionType));
+    }
+
+    @GetMapping("/occurrence/{occurrence}/all")
+    public ResponseEntity getAllTransactionsByOccurrence(@PathVariable("occurrence") String occurrenceType){
+        return ResponseEntity.ok(transactionService.getAllByOccurrence(occurrenceType));
     }
 
     @GetMapping("{id}")

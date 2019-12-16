@@ -155,5 +155,12 @@ public class TransactionService {
         return ((List<TransactionOccurrenceType>) transactionOccurrenceTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, OccurrenceDTO.class)).collect(Collectors.toList());
     }
 
-
+    /**
+     * Get all transactions by occurrence type
+     * @param occurrenceType the name of an occurrence type
+     * @return a list of transactions
+     */
+    public List<TransactionDTO> getAllByOccurrence(String occurrenceType) {
+        return transactionRepository.findAllByOccurrence_Name(occurrenceType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    }
 }
