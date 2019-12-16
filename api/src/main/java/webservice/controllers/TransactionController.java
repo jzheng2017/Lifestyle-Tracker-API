@@ -24,12 +24,17 @@ public class TransactionController {
 
     @GetMapping("/type/{type}/all")
     public ResponseEntity getAllTransactionsByType(@PathVariable("type") String transactionType) {
-        return ResponseEntity.ok(transactionService.getAllByType(transactionType));
+        return ResponseEntity.ok(transactionService.getAllTransactionsByType(transactionType));
     }
 
     @GetMapping("/occurrence/{occurrence}/all")
     public ResponseEntity getAllTransactionsByOccurrence(@PathVariable("occurrence") String occurrenceType){
-        return ResponseEntity.ok(transactionService.getAllByOccurrence(occurrenceType));
+        return ResponseEntity.ok(transactionService.getAllTransactionsByOccurrence(occurrenceType));
+    }
+
+    @GetMapping("/category/{categoryId}/all")
+    public ResponseEntity getAllTransactionsByOccurrence(@PathVariable("categoryId") int categoryId){
+        return ResponseEntity.ok(transactionService.getAllTransactionsByCategory(categoryId));
     }
 
     @GetMapping("{id}")

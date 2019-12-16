@@ -113,7 +113,7 @@ public class TransactionService {
      * @param transactionType type of a transaction (ex. income)
      * @return a list of transactions
      */
-    public List<TransactionDTO> getAllByType(String transactionType) {
+    public List<TransactionDTO> getAllTransactionsByType(String transactionType) {
         return transactionRepository.findAllByTransactionType_Type(transactionType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
@@ -160,7 +160,16 @@ public class TransactionService {
      * @param occurrenceType the name of an occurrence type
      * @return a list of transactions
      */
-    public List<TransactionDTO> getAllByOccurrence(String occurrenceType) {
+    public List<TransactionDTO> getAllTransactionsByOccurrence(String occurrenceType) {
         return transactionRepository.findAllByOccurrence_Name(occurrenceType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    }
+
+    /**
+     * Get all transactions by category id
+     * @param categoryId the id of a category
+     * @return a list of transactions
+     */
+    public List<TransactionDTO> getAllTransactionsByCategory(int categoryId) {
+        return transactionRepository.findAllByCategory_Id(categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 }
