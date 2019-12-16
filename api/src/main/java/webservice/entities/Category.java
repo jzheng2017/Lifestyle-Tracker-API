@@ -1,5 +1,6 @@
 package webservice.entities;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -22,8 +23,8 @@ public class Category {
     @Nullable
     private Integer parentId;
 
-    @Column(name = "created_at")
-    @NotNull
+    @Column(nullable = false, name = "created_at")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
