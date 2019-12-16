@@ -3,7 +3,7 @@ package webservice.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import webservice.configs.KeyConfig;
+import webservice.configs.AppConfig;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -12,11 +12,11 @@ import java.util.Base64;
 @Service
 public class KeyService {
 
-    private KeyConfig keyConfig;
+    private AppConfig appConfig;
 
     @Autowired
-    public void setKeyConfig(KeyConfig keyConfig) {
-        this.keyConfig = keyConfig;
+    public void setAppConfig(AppConfig appConfig) {
+        this.appConfig = appConfig;
     }
 
     /**
@@ -34,7 +34,7 @@ public class KeyService {
      * @return a String converted to a SecretKey object
      */
     public Key ConvertStringToSecretKey(String secretKey){
-        return (Key) new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
+        return new SecretKeySpec(secretKey.getBytes(), "HmacSHA256");
     }
 
     /**
@@ -42,7 +42,7 @@ public class KeyService {
      * @return a key
      */
     public Key getSecretKey(){
-        return ConvertStringToSecretKey(keyConfig.getSecret());
+        return ConvertStringToSecretKey(appConfig.getSecret());
     }
 
 }

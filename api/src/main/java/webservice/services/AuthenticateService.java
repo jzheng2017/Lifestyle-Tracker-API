@@ -41,12 +41,11 @@ public class AuthenticateService {
      * @return user token if authentication successful
      */
     public TokenDTO authenticateUser(CredentialDTO credentials) {
-        final int tokenExpirationTime = 60 * 5; //5 minutes
         User user = userRepository.findByUsername(credentials.getUsername()).orElseThrow(() -> new ResourceNotFoundException("User not found"));
         if (!hashService.valid(credentials.getPassword(), user.getPassword())) { //checks for validity of password
             throw new BadCredentialsException("Invalid login information");
         }
-        return new TokenDTO(jwtUtil.generateToken(user.getUsername(), tokenExpirationTime));
+        return new TokenDTO(jwtUtil.generateToken(user.getUsername()));
     }
 
     public Boolean authenticateToken(String token) {
