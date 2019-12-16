@@ -46,4 +46,9 @@ public class TransactionController {
     public ResponseEntity deleteTransaction(@PathVariable("id") int transactionId){
         return ResponseEntity.ok(transactionService.deleteTransaction(transactionId));
     }
+
+    @GetMapping("/types")
+    public ResponseEntity getAllTransactionTypes(){
+        return ResponseEntity.ok(transactionService.getAllTransactionTypes());
+    }
 }

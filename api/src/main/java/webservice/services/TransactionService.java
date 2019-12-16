@@ -4,9 +4,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.dto.TransactionDTO;
+import webservice.dto.TransactionTypeDTO;
 import webservice.entities.Transaction;
+import webservice.entities.TransactionType;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionRepository;
+import webservice.repositories.TransactionTypeRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +18,17 @@ import java.util.stream.Collectors;
 public class TransactionService {
 
     private TransactionRepository transactionRepository;
+    private TransactionTypeRepository transactionTypeRepository;
     private ModelMapper modelMapper;
 
     @Autowired
     public void setTransactionRepository(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
+    }
+
+    @Autowired
+    public void setTransactionTypeRepository(TransactionTypeRepository transactionTypeRepository) {
+        this.transactionTypeRepository = transactionTypeRepository;
     }
 
     @Autowired
@@ -109,4 +118,13 @@ public class TransactionService {
     public List<TransactionDTO> getAllUserTransactionsByCategory(int userId, int categoryId) {
         return transactionRepository.findAllByUserIdAndCategoryId(userId, categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
+
+    /**
+     * Get all transaction types
+     * @return a list of transaction types
+     */
+    public List<TransactionTypeDTO> getAllTransactionTypes() {
+        return ((List<TransactionType>)transactionTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionTypeDTO.class)).collect(Collectors.toList());
+    }
+
 }
