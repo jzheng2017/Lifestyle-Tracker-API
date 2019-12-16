@@ -51,4 +51,8 @@ public class TransactionController {
     public ResponseEntity getAllTransactionTypes(){
         return ResponseEntity.ok(transactionService.getAllTransactionTypes());
     }
+    @GetMapping("/occurrence-types")
+    public ResponseEntity getAllTransactionOccurrenceTypes(){
+        return ResponseEntity.ok(transactionService.getAllTransactionOccurrenceTypes());
+    }
 }

@@ -3,11 +3,14 @@ package webservice.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
 import webservice.dto.TransactionTypeDTO;
 import webservice.entities.Transaction;
+import webservice.entities.TransactionOccurrenceType;
 import webservice.entities.TransactionType;
 import webservice.exceptions.ResourceNotFoundException;
+import webservice.repositories.TransactionOccurrenceTypeRepository;
 import webservice.repositories.TransactionRepository;
 import webservice.repositories.TransactionTypeRepository;
 
@@ -19,6 +22,7 @@ public class TransactionService {
 
     private TransactionRepository transactionRepository;
     private TransactionTypeRepository transactionTypeRepository;
+    private TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository;
     private ModelMapper modelMapper;
 
     @Autowired
@@ -32,12 +36,18 @@ public class TransactionService {
     }
 
     @Autowired
+    public void setTransactionOccurrenceTypeRepository(TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository) {
+        this.transactionOccurrenceTypeRepository = transactionOccurrenceTypeRepository;
+    }
+
+    @Autowired
     public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
     /**
      * Get all transactions by user id
+     *
      * @param userId the id of a user
      * @return a list of transactions
      */
@@ -47,8 +57,9 @@ public class TransactionService {
 
     /**
      * Get all transactions by user id of specific transaction type
+     *
      * @param userId the id of a user
-     * @param type type of a transaction (ex. income)
+     * @param type   type of a transaction (ex. income)
      * @return a list of transactions
      */
     public List<TransactionDTO> getAllUserTransactionsByType(int userId, String type) {
@@ -58,6 +69,7 @@ public class TransactionService {
 
     /**
      * Delete transaction by id
+     *
      * @param transactionId the id of the transaction
      * @return deleted or not of type boolean
      */
@@ -67,6 +79,7 @@ public class TransactionService {
 
     /**
      * Update the transaction
+     *
      * @param transaction transaction object containing the new values
      * @return the updated transaction
      */
@@ -76,6 +89,7 @@ public class TransactionService {
 
     /**
      * Add a new transaction
+     *
      * @param transaction transaction object to be added
      * @return transaction object that has been added
      */
@@ -85,6 +99,7 @@ public class TransactionService {
 
     /**
      * Get a specific transaction by id
+     *
      * @param transactionId the id of a transaction
      * @return a transaction object
      */
@@ -94,6 +109,7 @@ public class TransactionService {
 
     /**
      * Get all transactions by type
+     *
      * @param transactionType type of a transaction (ex. income)
      * @return a list of transactions
      */
@@ -103,6 +119,7 @@ public class TransactionService {
 
     /**
      * Get all transactions
+     *
      * @return a list of transactions
      */
     public List<TransactionDTO> getAllTransactions() {
@@ -111,7 +128,8 @@ public class TransactionService {
 
     /**
      * Get all transactions by user id of a specific category
-     * @param userId the id of a user
+     *
+     * @param userId     the id of a user
      * @param categoryId the id of a category
      * @return a list of transactions
      */
@@ -121,10 +139,20 @@ public class TransactionService {
 
     /**
      * Get all transaction types
+     *
      * @return a list of transaction types
      */
     public List<TransactionTypeDTO> getAllTransactionTypes() {
-        return ((List<TransactionType>)transactionTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionTypeDTO.class)).collect(Collectors.toList());
+        return ((List<TransactionType>) transactionTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionTypeDTO.class)).collect(Collectors.toList());
     }
+
+    /**
+     * Get all transaction occurrence types
+     * @return a list of transaction occurrence types
+     */
+    public List<OccurrenceDTO> getAllTransactionOccurrenceTypes() {
+        return ((List<TransactionOccurrenceType>) transactionOccurrenceTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, OccurrenceDTO.class)).collect(Collectors.toList());
+    }
+
 
 }
