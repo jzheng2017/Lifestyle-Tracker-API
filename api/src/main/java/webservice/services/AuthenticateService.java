@@ -1,7 +1,6 @@
 package webservice.services;
 
 import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.dto.CredentialDTO;
@@ -13,8 +12,6 @@ import webservice.exceptions.UnauthorizedActionException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.JwtUtil;
-
-import java.security.Key;
 
 @Service
 public class AuthenticateService {

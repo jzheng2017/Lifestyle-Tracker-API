@@ -148,6 +148,7 @@ public class TransactionService {
 
     /**
      * Get all transaction occurrence types
+     *
      * @return a list of transaction occurrence types
      */
     public List<OccurrenceDTO> getAllTransactionOccurrenceTypes() {

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.services.AppConfigService;
 import webservice.services.KeyService;
+
 import java.util.Date;
 
 @Service
@@ -25,6 +26,7 @@ public class JwtUtil {
 
     /**
      * Validates the JWT token
+     *
      * @param token a JWT token
      * @return whether the passed in JWT token is valid
      */
@@ -34,7 +36,8 @@ public class JwtUtil {
 
     /**
      * Generates a JWT token
-     * @param subject a JWT subject claim
+     *
+     * @param subject    a JWT subject claim
      * @param expiration expiration date of the token (in seconds)
      * @return generated JWT token
      */
@@ -51,6 +54,7 @@ public class JwtUtil {
 
     /**
      * Generates a JWT token
+     *
      * @param subject a JWT subject claim
      * @return generated JWT token
      */
@@ -68,6 +72,7 @@ public class JwtUtil {
 
     /**
      * Get body (claims) of a JWT token
+     *
      * @param token a JWT token
      * @return all claims of the passed in JWT token
      */
@@ -77,6 +82,7 @@ public class JwtUtil {
 
     /**
      * Checks whether the passed in token has expired
+     *
      * @param token a JWT token
      * @return whether the token has expired
      */

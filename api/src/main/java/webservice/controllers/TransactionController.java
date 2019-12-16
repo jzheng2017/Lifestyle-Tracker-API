@@ -18,17 +18,17 @@ public class TransactionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity getAllTransactions(){
+    public ResponseEntity getAllTransactions() {
         return ResponseEntity.ok(transactionService.getAllTransactions());
     }
 
     @GetMapping("/{type}/all")
-    public ResponseEntity getAllTransactionsByType(@PathVariable("type") String transactionType){
+    public ResponseEntity getAllTransactionsByType(@PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllByType(transactionType));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity getTransaction(@PathVariable("id") int transactionId){
+    public ResponseEntity getTransaction(@PathVariable("id") int transactionId) {
         return ResponseEntity.ok(transactionService.getTransaction(transactionId));
     }
 
@@ -38,21 +38,22 @@ public class TransactionController {
     }
 
     @PutMapping
-    public ResponseEntity updateTransaction(@RequestBody TransactionDTO transaction){
+    public ResponseEntity updateTransaction(@RequestBody TransactionDTO transaction) {
         return ResponseEntity.ok(transactionService.updateTransaction(transaction));
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity deleteTransaction(@PathVariable("id") int transactionId){
+    public ResponseEntity deleteTransaction(@PathVariable("id") int transactionId) {
         return ResponseEntity.ok(transactionService.deleteTransaction(transactionId));
     }
 
     @GetMapping("/types")
-    public ResponseEntity getAllTransactionTypes(){
+    public ResponseEntity getAllTransactionTypes() {
         return ResponseEntity.ok(transactionService.getAllTransactionTypes());
     }
+
     @GetMapping("/occurrence-types")
-    public ResponseEntity getAllTransactionOccurrenceTypes(){
+    public ResponseEntity getAllTransactionOccurrenceTypes() {
         return ResponseEntity.ok(transactionService.getAllTransactionOccurrenceTypes());
     }
 }

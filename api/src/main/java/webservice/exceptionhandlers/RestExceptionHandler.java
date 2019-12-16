@@ -28,22 +28,22 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity handleEntityNotFound(ResourceNotFoundException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionMessage(404, ex.getMessage(), LocalDateTime.now()));
+    public ResponseEntity handleEntityNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionMessage(404, ex.getMessage(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(UnauthorizedActionException.class)
-    public ResponseEntity handleUnauthorizedAction(UnauthorizedActionException ex){
+    public ResponseEntity handleUnauthorizedAction(UnauthorizedActionException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionMessage(401, ex.getMessage(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(DuplicateEntryException.class)
-    public ResponseEntity handleDuplicateEntry(DuplicateEntryException ex){
+    public ResponseEntity handleDuplicateEntry(DuplicateEntryException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionMessage(409, ex.getMessage(), LocalDateTime.now()));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity handleBadCredentials(BadCredentialsException ex){
+    public ResponseEntity handleBadCredentials(BadCredentialsException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionMessage(403, ex.getMessage(), LocalDateTime.now()));
     }
 

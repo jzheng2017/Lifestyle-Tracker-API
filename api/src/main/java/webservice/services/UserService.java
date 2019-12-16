@@ -1,4 +1,5 @@
 package webservice.services;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.Util;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,6 +40,7 @@ public class UserService {
 
     /**
      * Gets all users
+     *
      * @return list of all users
      */
     public List<UserDTO> getAllUsers() {
@@ -46,6 +49,7 @@ public class UserService {
 
     /**
      * Get a specific user by id
+     *
      * @param userId the id of a user
      * @return user
      */
@@ -56,6 +60,7 @@ public class UserService {
 
     /**
      * Update the user
+     *
      * @param user user object with new values
      * @return updated user
      */
@@ -68,6 +73,7 @@ public class UserService {
 
     /**
      * Delete user by id
+     *
      * @param userId the id of a user
      * @return deleted or not of type boolean
      */
@@ -82,6 +88,7 @@ public class UserService {
 
     /**
      * Add user
+     *
      * @param user registration values
      * @return object of the added user
      */

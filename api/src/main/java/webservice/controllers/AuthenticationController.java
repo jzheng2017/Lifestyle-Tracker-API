@@ -25,6 +25,7 @@ public class AuthenticationController {
     public ResponseEntity authenticate(@Valid @RequestBody CredentialDTO credentials) {
         return ResponseEntity.ok(authenticateService.authenticateUser(credentials));
     }
+
     @PostMapping("/token")
     public ResponseEntity authenticate(@RequestBody TokenDTO token) {
         return ResponseEntity.ok(authenticateService.authenticateToken(token.getToken()));

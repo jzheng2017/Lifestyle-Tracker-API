@@ -16,7 +16,7 @@ public class TransactionDTO {
     private CategoryDTO category;
     private UserDTO user;
 
-    public TransactionDTO(){
+    public TransactionDTO() {
 
     }
 

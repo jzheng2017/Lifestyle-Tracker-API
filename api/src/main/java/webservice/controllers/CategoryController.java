@@ -34,12 +34,12 @@ public class CategoryController {
     }
 
     @PostMapping("create")
-    public ResponseEntity createCategory(@RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity createCategory(@RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
     }
 
     @PutMapping("update")
-    public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO){
+    public ResponseEntity updateCategory(@RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
     }
 }

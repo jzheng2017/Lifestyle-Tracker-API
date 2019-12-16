@@ -31,6 +31,7 @@ public class CategoryService {
 
     /**
      * Get all categories
+     *
      * @return a list of categories
      */
     public List<CategoryDTO> getAll() {
@@ -39,6 +40,7 @@ public class CategoryService {
 
     /**
      * Get a specific category by id
+     *
      * @param categoryId the id of a category
      * @return a specific category
      */
@@ -48,6 +50,7 @@ public class CategoryService {
 
     /**
      * Get all children of a category
+     *
      * @param parentId the id of a parent category
      * @return a list of categories
      */
@@ -57,6 +60,7 @@ public class CategoryService {
 
     /**
      * Add a category
+     *
      * @param categoryDTO category object containing the category to be added
      * @return the added category
      */
@@ -66,6 +70,7 @@ public class CategoryService {
 
     /**
      * Update a category
+     *
      * @param categoryDTO category object containing the new values
      * @return the updated category
      */
@@ -79,6 +84,7 @@ public class CategoryService {
 
     /**
      * Adds or update a category
+     *
      * @param categoryDTO a category
      * @return the added or updated category
      */

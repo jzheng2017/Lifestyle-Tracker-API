@@ -16,5 +16,7 @@ public class AppConfig {
         return secret;
     }
 
-    public String getExpiration(){return expiration;}
+    public String getExpiration() {
+        return expiration;
+    }
 }

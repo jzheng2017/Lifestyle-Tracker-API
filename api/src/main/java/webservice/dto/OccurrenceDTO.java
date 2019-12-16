@@ -4,7 +4,9 @@ public class OccurrenceDTO {
     private Integer id;
     private String name;
 
-    public OccurrenceDTO(){}
+    public OccurrenceDTO() {
+    }
+
     public OccurrenceDTO(int id, String name) {
         this.id = id;
         this.name = name;

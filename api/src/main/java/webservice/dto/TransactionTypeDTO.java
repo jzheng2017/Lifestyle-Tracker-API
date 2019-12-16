@@ -4,7 +4,8 @@ public class TransactionTypeDTO {
     private Integer id;
     private String type;
 
-    public TransactionTypeDTO(){}
+    public TransactionTypeDTO() {
+    }
 
     public TransactionTypeDTO(int id, String type) {
         this.id = id;

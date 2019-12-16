@@ -8,7 +8,8 @@ public class CategoryDTO {
     private String name;
     private Integer parentId;
 
-    public CategoryDTO(){}
+    public CategoryDTO() {
+    }
 
     public CategoryDTO(Integer id, String name, Integer parentId) {
         this.id = id;
