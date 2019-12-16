@@ -70,5 +70,4 @@ public class UserController {
     public ResponseEntity getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByCategory(userId, categoryId));
     }
-
 }
