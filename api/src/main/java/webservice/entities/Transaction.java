@@ -12,7 +12,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "transaction_name")
+    @Column(name = "name")
     @NotNull
     private String name;
 

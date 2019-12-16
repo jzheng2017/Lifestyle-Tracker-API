@@ -10,7 +10,7 @@ public class TransactionOccurrenceType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "occurrence_name")
+    @Column(name = "name")
     @NotNull
     private String name;
 

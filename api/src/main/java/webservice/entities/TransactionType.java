@@ -10,7 +10,7 @@ public class TransactionType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "type_name")
+    @Column(name = "type")
     @NotNull
     private String type;
 
