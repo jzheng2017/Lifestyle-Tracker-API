@@ -64,14 +64,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.3.0</version>
-                <configuration>
-                    <repoToken>x0FvOmkWiWK3Wq0r5WdzQ2Wjq9aBRg2ht</repoToken>
-                </configuration>
-            </plugin>
         </plugins>
         <finalName>api</finalName>
     </build>
