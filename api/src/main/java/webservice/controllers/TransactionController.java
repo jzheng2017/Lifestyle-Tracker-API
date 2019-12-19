@@ -38,7 +38,7 @@ public class TransactionController {
     }
 
     @GetMapping("/category/{categoryId}/all")
-    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByOccurrence(@PathVariable("categoryId") int categoryId) {
+    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByCategory(@PathVariable("categoryId") int categoryId) {
         return ResponseEntity.ok(transactionService.getAllTransactionsByCategory(categoryId));
     }
 
