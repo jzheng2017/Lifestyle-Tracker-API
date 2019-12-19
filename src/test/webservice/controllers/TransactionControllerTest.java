@@ -8,7 +8,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
+import webservice.dto.TransactionTypeDTO;
 import webservice.services.TransactionService;
 
 import java.util.ArrayList;
@@ -263,6 +265,59 @@ public class TransactionControllerTest {
         transactionController.deleteTransaction(transactionId);
 
         verify(transactionService).deleteTransaction(transactionId);
+    }
+
+
+    @Test
+    public void getAllTransactionTypesReturnsStatus200() {
+        final HttpStatus expectedStatusCode = HttpStatus.OK;
+        final HttpStatus actualStatusCode = transactionController.getAllTransactionTypes().getStatusCode();
+
+        Assertions.assertEquals(expectedStatusCode, actualStatusCode);
+    }
+
+    @Test
+    public void getAllTransactionTypesReturnsListOfTransactionTypes() {
+        final List<TransactionTypeDTO> list = new ArrayList<>();
+        ResponseEntity response;
+
+        when(transactionService.getAllTransactionTypes()).thenReturn(list);
+
+        response = transactionController.getAllTransactionTypes();
+
+        Assertions.assertEquals(list, response.getBody());
+    }
+
+    @Test
+    public void getAllTransactionTypesCallsTransactionServiceGetAllTransactionTypes() {
+        transactionController.getAllTransactionTypes();
+        verify(transactionService).getAllTransactionTypes();
+    }
+
+    @Test
+    public void getAllTransactionOccurrenceTypesReturnsStatus200() {
+        final HttpStatus expectedStatusCode = HttpStatus.OK;
+        final HttpStatus actualStatusCode = transactionController.getAllTransactionOccurrenceTypes().getStatusCode();
+
+        Assertions.assertEquals(expectedStatusCode, actualStatusCode);
+    }
+
+    @Test
+    public void getAllTransactionOccurrenceTypesReturnsListOfTransactionOccurrenceTypes() {
+        final List<OccurrenceDTO> list = new ArrayList<>();
+        ResponseEntity response;
+
+        when(transactionService.getAllTransactionOccurrenceTypes()).thenReturn(list);
+
+        response = transactionController.getAllTransactionOccurrenceTypes();
+
+        Assertions.assertEquals(list, response.getBody());
+    }
+
+    @Test
+    public void getAllTransactionOccurrenceTypesCallsTransactionServiceGetAllTransactionOccurrenceTypes() {
+        transactionController.getAllTransactionOccurrenceTypes();
+        verify(transactionService).getAllTransactionOccurrenceTypes();
     }
 
 
