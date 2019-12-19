@@ -30,7 +30,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 
 
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {

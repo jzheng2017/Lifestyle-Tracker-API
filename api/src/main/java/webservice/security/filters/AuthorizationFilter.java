@@ -43,6 +43,7 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(HEADER_STRING);
+
         if (token != null) {
             // parse the token.
             token = token.replace(TOKEN_PREFIX, "");
@@ -52,7 +53,6 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             } else {
                 user = null;
             }
-
 
             if (user != null) {
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
