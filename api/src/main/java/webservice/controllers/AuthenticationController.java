@@ -22,12 +22,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity authenticate(@Valid @RequestBody CredentialDTO credentials) {
+    public ResponseEntity<TokenDTO> authenticate(@Valid @RequestBody CredentialDTO credentials) {
         return ResponseEntity.ok(authenticateService.authenticateUser(credentials));
     }
 
     @PostMapping("/token")
-    public ResponseEntity authenticate(@RequestBody TokenDTO token) {
+    public ResponseEntity<Boolean> authenticate(@RequestBody TokenDTO token) {
         return ResponseEntity.ok(authenticateService.authenticateToken(token.getToken()));
     }
 

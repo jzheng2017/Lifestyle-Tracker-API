@@ -4,11 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webservice.dto.RegistrationDTO;
+import webservice.dto.TransactionDTO;
 import webservice.dto.UserDTO;
 import webservice.services.TransactionService;
 import webservice.services.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -30,49 +32,49 @@ public class UserController {
 
     // USER CRUDS
     @GetMapping("/all")
-    public ResponseEntity getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity getUser(@PathVariable("id") int userId) {
+    public ResponseEntity<UserDTO> getUser(@PathVariable("id") int userId) {
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") int userId) {
+    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") int userId) {
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
 
     @PutMapping("update")
-    public ResponseEntity updateUser(@Valid @RequestBody UserDTO user) {
+    public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
 
     @PostMapping("/add")
-    public ResponseEntity addUser(@Valid @RequestBody RegistrationDTO user) {
+    public ResponseEntity<UserDTO> addUser(@Valid @RequestBody RegistrationDTO user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
 
     //USER TRANSACTION CRUDS
 
     @GetMapping("{id}/transactions")
-    public ResponseEntity getAllUserTransactions(@PathVariable("id") int userId) {
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactions(@PathVariable("id") int userId) {
         return ResponseEntity.ok(transactionService.getAllTransactionsByUserId(userId));
     }
 
     @GetMapping("{id}/transactions/type/{type}/all")
-    public ResponseEntity getAllUserTransactionsByType(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByType(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
     }
 
     @GetMapping("{id}/transactions/occurrence/{occurrence}/all")
-    public ResponseEntity getAllUserTransactionsByOccurrence(@PathVariable("id") int userId, @PathVariable("occurrence") String occurrenceType) {
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByOccurrence(@PathVariable("id") int userId, @PathVariable("occurrence") String occurrenceType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurence(userId, occurrenceType));
     }
 
     @GetMapping("{userId}/transactions/category/{categoryId}/all")
-    public ResponseEntity getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByCategory(userId, categoryId));
     }
 }
