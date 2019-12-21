@@ -258,7 +258,7 @@ public class UserControllerTest {
         final String occurrence = "monthly";
         final int userId = 1;
 
-        when(transactionService.getAllUserTransactionsByOccurence(userId, occurrence)).thenReturn(transactions);
+        when(transactionService.getAllUserTransactionsByOccurrence(userId, occurrence)).thenReturn(transactions);
 
         response = userController.getAllUserTransactionsByOccurrence(userId, occurrence);
 
@@ -271,7 +271,7 @@ public class UserControllerTest {
         final int userId = 1;
 
         userController.getAllUserTransactionsByOccurrence(userId, type);
-        verify(transactionService).getAllUserTransactionsByOccurence(userId, type);
+        verify(transactionService).getAllUserTransactionsByOccurrence(userId, type);
     }
 
     @Test

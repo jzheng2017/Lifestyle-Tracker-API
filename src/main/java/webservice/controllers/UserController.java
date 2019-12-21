@@ -70,7 +70,7 @@ public class UserController {
 
     @GetMapping("{id}/transactions/occurrence/{occurrence}/all")
     public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByOccurrence(@PathVariable("id") int userId, @PathVariable("occurrence") String occurrenceType) {
-        return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurence(userId, occurrenceType));
+        return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurrence(userId, occurrenceType));
     }
 
     @GetMapping("{userId}/transactions/category/{categoryId}/all")
