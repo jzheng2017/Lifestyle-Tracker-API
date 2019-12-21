@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
+import webservice.dto.TransactionRequestDTO;
 import webservice.dto.TransactionTypeDTO;
 import webservice.entities.TransactionType;
 import webservice.services.TransactionService;
@@ -48,12 +49,12 @@ public class TransactionController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<TransactionDTO> addTransaction(@RequestBody TransactionDTO transaction) {
+    public ResponseEntity<TransactionDTO> addTransaction(@RequestBody TransactionRequestDTO transaction) {
         return ResponseEntity.ok(transactionService.insertTransaction(transaction));
     }
 
-    @PutMapping
-    public ResponseEntity<TransactionDTO> updateTransaction(@RequestBody TransactionDTO transaction) {
+    @PutMapping("/update")
+    public ResponseEntity<TransactionDTO> updateTransaction(@RequestBody TransactionRequestDTO transaction) {
         return ResponseEntity.ok(transactionService.updateTransaction(transaction));
     }
 

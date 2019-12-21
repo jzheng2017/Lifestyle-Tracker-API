@@ -1,5 +1,8 @@
 package webservice.entities;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -29,10 +32,11 @@ public class Transaction {
     private LocalDateTime transactionDate;
 
     @Column(name = "created_at")
-    @NotNull
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @Nullable
     private LocalDateTime updatedAt;
 
     @ManyToOne
@@ -49,7 +53,7 @@ public class Transaction {
 
     @ManyToOne
     @NotNull
-    private TransactionOccurrenceType occurrence;
+    private OccurrenceType occurrence;
 
     public int getId() {
         return id;
@@ -131,11 +135,11 @@ public class Transaction {
         this.user = user;
     }
 
-    public TransactionOccurrenceType getOccurrence() {
+    public OccurrenceType getOccurrence() {
         return occurrence;
     }
 
-    public void setOccurrence(TransactionOccurrenceType occurrence) {
+    public void setOccurrence(OccurrenceType occurrence) {
         this.occurrence = occurrence;
     }
 }

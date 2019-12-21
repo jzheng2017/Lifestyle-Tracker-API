@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
+import webservice.dto.TransactionRequestDTO;
 import webservice.dto.TransactionTypeDTO;
 import webservice.services.TransactionService;
 
@@ -178,7 +179,7 @@ public class TransactionControllerTest {
 
     @Test
     public void addTransactionReturnsStatus200() {
-        TransactionDTO transaction = new TransactionDTO();
+        TransactionRequestDTO transaction = new TransactionRequestDTO();
         ResponseEntity response = transactionController.addTransaction(transaction);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
 
@@ -188,18 +189,19 @@ public class TransactionControllerTest {
     @Test
     public void addTransactionReturnsTransactionDTO() {
         ResponseEntity response;
-        TransactionDTO transaction = new TransactionDTO();
+        TransactionDTO transactionDTO = new TransactionDTO();
+        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO();
 
-        when(transactionService.insertTransaction(transaction)).thenReturn(transaction);
+        when(transactionService.insertTransaction(transactionRequestDTO)).thenReturn(transactionDTO);
 
-        response = transactionController.addTransaction(transaction);
+        response = transactionController.addTransaction(transactionRequestDTO);
 
-        Assertions.assertEquals(transaction, response.getBody());
+        Assertions.assertEquals(transactionDTO, response.getBody());
     }
 
     @Test
     public void addTransactionCallsTransactionServiceInsertTransaction() {
-        TransactionDTO transaction = new TransactionDTO();
+        TransactionRequestDTO transaction = new TransactionRequestDTO();
 
         transactionController.addTransaction(transaction);
 
@@ -208,7 +210,7 @@ public class TransactionControllerTest {
 
     @Test
     public void updateTransactionReturnsStatus200() {
-        final TransactionDTO transaction = new TransactionDTO();
+        final TransactionRequestDTO transaction = new TransactionRequestDTO();
         ResponseEntity response = transactionController.updateTransaction(transaction);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
 
@@ -219,18 +221,19 @@ public class TransactionControllerTest {
     public void updateTransactionReturnsTransactionDTO() {
 
         ResponseEntity response;
+        TransactionRequestDTO transactionRequest = new TransactionRequestDTO();
         TransactionDTO transaction = new TransactionDTO();
 
-        when(transactionService.updateTransaction(transaction)).thenReturn(transaction);
+        when(transactionService.updateTransaction(transactionRequest)).thenReturn(transaction);
 
-        response = transactionController.updateTransaction(transaction);
+        response = transactionController.updateTransaction(transactionRequest);
 
         Assertions.assertEquals(transaction, response.getBody());
     }
 
     @Test
     public void updateTransactionCallsTransactionServiceUpdateTransaction() {
-        TransactionDTO transaction = new TransactionDTO();
+        TransactionRequestDTO transaction = new TransactionRequestDTO();
 
         transactionController.updateTransaction(transaction);
 

@@ -5,15 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
+import webservice.dto.TransactionRequestDTO;
 import webservice.dto.TransactionTypeDTO;
-import webservice.entities.Transaction;
-import webservice.entities.TransactionOccurrenceType;
-import webservice.entities.TransactionType;
+import webservice.entities.*;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionOccurrenceTypeRepository;
 import webservice.repositories.TransactionRepository;
 import webservice.repositories.TransactionTypeRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +23,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     private TransactionTypeRepository transactionTypeRepository;
     private TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository;
+    private EntityManager entityManager;
     private ModelMapper modelMapper;
 
     @Autowired
@@ -38,6 +39,11 @@ public class TransactionService {
     @Autowired
     public void setTransactionOccurrenceTypeRepository(TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository) {
         this.transactionOccurrenceTypeRepository = transactionOccurrenceTypeRepository;
+    }
+
+    @Autowired
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Autowired
@@ -74,27 +80,36 @@ public class TransactionService {
      * @return deleted or not of type boolean
      */
     public boolean deleteTransaction(int transactionId) {
-        return false;
+        if (transactionRepository.existsById(transactionId)) {
+            transactionRepository.deleteById(transactionId);
+            return true;
+        } else {
+            throw new ResourceNotFoundException("Transaction not found");
+        }
     }
 
     /**
      * Update the transaction
      *
-     * @param transaction transaction object containing the new values
+     * @param transactionRequest transaction object containing the new values
      * @return the updated transaction
      */
-    public TransactionDTO updateTransaction(TransactionDTO transaction) {
-        return null;
+    public TransactionDTO updateTransaction(TransactionRequestDTO transactionRequest) {
+        if (transactionRepository.existsById(transactionRequest.getId())) {
+            return createUpdateTransactionDTO(transactionRequest);
+        } else {
+            throw new ResourceNotFoundException("Transaction not found");
+        }
     }
 
     /**
      * Add a new transaction
      *
-     * @param transaction transaction object to be added
+     * @param transactionRequest transaction object to be added
      * @return transaction object that has been added
      */
-    public TransactionDTO insertTransaction(TransactionDTO transaction) {
-        return modelMapper.map(transactionRepository.save(modelMapper.map(transaction, Transaction.class)), TransactionDTO.class);
+    public TransactionDTO insertTransaction(TransactionRequestDTO transactionRequest) {
+        return createUpdateTransactionDTO(transactionRequest);
     }
 
     /**
@@ -152,7 +167,7 @@ public class TransactionService {
      * @return a list of transaction occurrence types
      */
     public List<OccurrenceDTO> getAllTransactionOccurrenceTypes() {
-        return ((List<TransactionOccurrenceType>) transactionOccurrenceTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, OccurrenceDTO.class)).collect(Collectors.toList());
+        return ((List<OccurrenceType>) transactionOccurrenceTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, OccurrenceDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -175,7 +190,18 @@ public class TransactionService {
         return transactionRepository.findAllByCategory_Id(categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
-    public List<TransactionDTO> getAllUserTransactionsByOccurence(int userId, String occurrenceType) {
+    public List<TransactionDTO> getAllUserTransactionsByOccurrence(int userId, String occurrenceType) {
         return transactionRepository.findAllByUserIdAndOccurrence_Name(userId, occurrenceType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
+
+    private TransactionDTO createUpdateTransactionDTO(TransactionRequestDTO transactionRequest) {
+        Transaction transaction = modelMapper.map(transactionRequest, Transaction.class);
+        transaction.setCategory(entityManager.getReference(Category.class, transactionRequest.getCategoryId()));
+        transaction.setOccurrence(entityManager.getReference(OccurrenceType.class, transactionRequest.getOccurrenceTypeId()));
+        transaction.setTransactionType(entityManager.getReference(TransactionType.class, transactionRequest.getTransactionTypeId()));
+        transaction.setUser(entityManager.getReference(User.class, transactionRequest.getUserId()));
+        return modelMapper.map(transactionRepository.save(transaction), TransactionDTO.class);
+    }
+
+
 }
