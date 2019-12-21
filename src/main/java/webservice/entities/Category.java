@@ -19,9 +19,9 @@ public class Category {
     @NotNull
     private String name;
 
-    @Column(name = "parent_id")
-    @Nullable
-    private Integer parentId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
 
     @Column(nullable = false, name = "created_at")
     @CreationTimestamp
@@ -48,12 +48,12 @@ public class Category {
         this.name = name;
     }
 
-    public Integer getParentId() {
-        return parentId;
+    public Category getParent() {
+        return parent;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setParent(Category parent) {
+        this.parent = parent;
     }
 
     public LocalDateTime getCreatedAt() {

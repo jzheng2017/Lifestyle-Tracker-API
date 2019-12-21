@@ -6,21 +6,21 @@ public class CategoryDTO {
     private Integer id;
     @NotEmpty(message = "Category name can not be empty")
     private String name;
-    private Integer parentId;
+    private CategoryDTO parent;
 
     public CategoryDTO() {
     }
 
-    public CategoryDTO(Integer id, String name, Integer parentId) {
+    public CategoryDTO(Integer id, String name, CategoryDTO parent) {
         this.id = id;
         this.name = name;
-        this.parentId = parentId;
+        this.parent = parent;
     }
 
-    public CategoryDTO(int categoryId, String categoryName, Integer parentId) {
+    public CategoryDTO(int categoryId, String categoryName, CategoryDTO parent) {
         this.id = categoryId;
         this.name = categoryName;
-        this.parentId = parentId;
+        this.parent = parent;
     }
 
     public String getName() {
@@ -31,12 +31,12 @@ public class CategoryDTO {
         this.name = name;
     }
 
-    public Integer getParentId() {
-        return parentId;
+    public CategoryDTO getParent() {
+        return parent;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setParent(CategoryDTO parent) {
+        this.parent = parent;
     }
 
     public Integer getId() {
