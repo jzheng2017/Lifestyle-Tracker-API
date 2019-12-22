@@ -196,10 +196,7 @@ public class TransactionService {
 
     private TransactionDTO createUpdateTransactionDTO(TransactionRequestDTO transactionRequest) {
         Transaction transaction = modelMapper.map(transactionRequest, Transaction.class);
-        transaction.setCategory(entityManager.getReference(Category.class, transactionRequest.getCategoryId()));
-        transaction.setOccurrence(entityManager.getReference(OccurrenceType.class, transactionRequest.getOccurrenceTypeId()));
-        transaction.setTransactionType(entityManager.getReference(TransactionType.class, transactionRequest.getTransactionTypeId()));
-        transaction.setUser(entityManager.getReference(User.class, transactionRequest.getUserId()));
+
         return modelMapper.map(transactionRepository.save(transaction), TransactionDTO.class);
     }
 
