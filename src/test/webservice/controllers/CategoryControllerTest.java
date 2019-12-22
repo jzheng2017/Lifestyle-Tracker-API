@@ -22,6 +22,8 @@ public class CategoryControllerTest {
     private CategoryController categoryController;
     @Mock
     private CategoryService categoryService;
+    private final String order = "asc";
+    private final String orderBy = "id";
 
     @Before
     public void setup() {
@@ -31,7 +33,7 @@ public class CategoryControllerTest {
     @Test
     public void getAllCategoriesReturnsStatus200() {
         final HttpStatus expectedStatusCode = HttpStatus.OK;
-        final HttpStatus actualStatusCode = categoryController.getAllCategories().getStatusCode();
+        final HttpStatus actualStatusCode = categoryController.getAllCategories(order, orderBy).getStatusCode();
 
         Assertions.assertEquals(expectedStatusCode, actualStatusCode);
     }
@@ -41,17 +43,17 @@ public class CategoryControllerTest {
         final List<CategoryDTO> list = new ArrayList<>();
         ResponseEntity response;
 
-        when(categoryService.getAll()).thenReturn(list);
+        when(categoryService.getAll(order, orderBy)).thenReturn(list);
 
-        response = categoryController.getAllCategories();
+        response = categoryController.getAllCategories(order, orderBy);
 
         Assertions.assertEquals(list, response.getBody());
     }
 
     @Test
     public void getAllCategoriesCallsCategoryServiceGetAll() {
-        categoryController.getAllCategories();
-        verify(categoryService).getAll();
+        categoryController.getAllCategories(order, orderBy);
+        verify(categoryService).getAll(order, orderBy);
     }
 
     @Test
@@ -87,7 +89,7 @@ public class CategoryControllerTest {
     public void getAllChildrenReturnsStatus200() {
         final HttpStatus expectedStatusCode = HttpStatus.OK;
         final int parentId = 1;
-        final HttpStatus actualStatusCode = categoryController.getAllChildren(parentId).getStatusCode();
+        final HttpStatus actualStatusCode = categoryController.getAllChildren(parentId, order, orderBy).getStatusCode();
 
         Assertions.assertEquals(expectedStatusCode, actualStatusCode);
     }
@@ -98,9 +100,9 @@ public class CategoryControllerTest {
         final int parentId = 1;
         ResponseEntity response;
 
-        when(categoryService.getChildren(parentId)).thenReturn(list);
+        when(categoryService.getChildren(parentId, order, orderBy)).thenReturn(list);
 
-        response = categoryController.getAllChildren(parentId);
+        response = categoryController.getAllChildren(parentId, order, orderBy);
 
         Assertions.assertEquals(list, response.getBody());
     }
@@ -108,8 +110,8 @@ public class CategoryControllerTest {
     @Test
     public void getAllChildrenCallsCategoryServiceGetAll() {
         final int parentId = 1;
-        categoryController.getAllChildren(parentId);
-        verify(categoryService).getChildren(parentId);
+        categoryController.getAllChildren(parentId, order, orderBy);
+        verify(categoryService).getChildren(parentId, order, orderBy);
     }
 
     @Test
