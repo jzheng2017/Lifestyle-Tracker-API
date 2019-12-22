@@ -2,6 +2,7 @@ package webservice.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import webservice.dto.CategoryDTO;
 import webservice.entities.Category;
@@ -32,10 +33,14 @@ public class CategoryService {
     /**
      * Get all categories
      *
+     * @param order   order direction, ascending or descending
+     * @param orderBy order by given field
      * @return a list of categories
      */
-    public List<CategoryDTO> getAll() {
-        return ((List<Category>) categoryRepository.findAll()).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
+    public List<CategoryDTO> getAll(String order, String orderBy) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return ((List<Category>) categoryRepository.findAll(Sort.by(sortDirection, orderBy))).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -52,10 +57,13 @@ public class CategoryService {
      * Get all children of a category
      *
      * @param parentId the id of a parent category
+     * @param order   order direction, ascending or descending
+     * @param orderBy order by given field
      * @return a list of categories
      */
-    public List<CategoryDTO> getChildren(int parentId) {
-        return categoryRepository.findAllByParentId(parentId).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
+    public List<CategoryDTO> getChildren(int parentId, String order, String orderBy) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        return categoryRepository.findAllByParentId(parentId, Sort.by(sortDirection, orderBy)).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     /**
