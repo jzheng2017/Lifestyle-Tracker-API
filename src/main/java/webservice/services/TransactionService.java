@@ -7,7 +7,9 @@ import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
 import webservice.dto.TransactionRequestDTO;
 import webservice.dto.TransactionTypeDTO;
-import webservice.entities.*;
+import webservice.entities.OccurrenceType;
+import webservice.entities.Transaction;
+import webservice.entities.TransactionType;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionOccurrenceTypeRepository;
 import webservice.repositories.TransactionRepository;
@@ -190,10 +192,23 @@ public class TransactionService {
         return transactionRepository.findAllByCategory_Id(categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Get all transactions by user id of a specific occurrence type
+     *
+     * @param userId         the id of a user
+     * @param occurrenceType the transaction occurrence type (ex. monthly)
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllUserTransactionsByOccurrence(int userId, String occurrenceType) {
         return transactionRepository.findAllByUserIdAndOccurrence_Name(userId, occurrenceType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
+    /**
+     * Create or update a transaction
+     *
+     * @param transactionRequest the object containing new values
+     * @return transaction containing the updated values
+     */
     private TransactionDTO createUpdateTransactionDTO(TransactionRequestDTO transactionRequest) {
         Transaction transaction = modelMapper.map(transactionRequest, Transaction.class);
 
