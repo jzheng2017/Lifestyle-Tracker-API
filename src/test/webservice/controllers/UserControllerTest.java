@@ -30,6 +30,15 @@ public class UserControllerTest {
     @Mock
     private TransactionService transactionService;
 
+    private ResponseEntity response;
+    private List<TransactionDTO> transactions = new ArrayList<>();
+    private List<UserDTO> users = new ArrayList<>();
+    private UserDTO userDTO = new UserDTO();
+    private final int categoryId = 1;
+    private final int userId = 1;
+    private final String occurrence = "monthly";
+    private final String type = "income";
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -51,9 +60,6 @@ public class UserControllerTest {
 
     @Test
     public void getAllUsersReturnsListOfUsers() {
-        ResponseEntity response;
-        List<UserDTO> users = new ArrayList<>();
-
         when(userService.getAllUsers()).thenReturn(users);
 
         response = userController.getAllUsers();
@@ -63,8 +69,7 @@ public class UserControllerTest {
 
     @Test
     public void getUserReturnsStatus200() {
-        final int userId = 1;
-        ResponseEntity response = userController.getUser(userId);
+        response = userController.getUser(userId);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
@@ -72,10 +77,6 @@ public class UserControllerTest {
 
     @Test
     public void getUserReturnsUserDTO() {
-        ResponseEntity response;
-        UserDTO userDTO = new UserDTO();
-        final int userId = 1;
-
         when(userService.getUser(anyInt())).thenReturn(userDTO);
 
         response = userController.getUser(userId);
@@ -85,25 +86,21 @@ public class UserControllerTest {
 
     @Test
     public void getUserCallsUserServiceGetUser() {
-        final int userId = 1;
         userController.getUser(userId);
         verify(userService).getUser(userId);
     }
 
     @Test
     public void deleteUserReturnsStatus200() {
-        final int userId = 1;
-        ResponseEntity response = userController.deleteUser(userId);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+
+        response = userController.deleteUser(userId);
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void deleteUserReturnsBoolean() {
-        ResponseEntity response;
-        final int userId = 1;
-
         when(userService.deleteUser(anyInt())).thenReturn(true);
 
         response = userController.deleteUser(userId);
@@ -113,8 +110,6 @@ public class UserControllerTest {
 
     @Test
     public void deleteUserCallsUserServiceDeleteUser() {
-        final int userId = 1;
-
         userController.deleteUser(userId);
 
         verify(userService).deleteUser(userId);
@@ -122,17 +117,15 @@ public class UserControllerTest {
 
     @Test
     public void updateUserReturnsStatus200() {
-        ResponseEntity response = userController.updateUser(new UserDTO());
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+
+        response = userController.updateUser(new UserDTO());
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void updateUserReturnsUserDTO() {
-        ResponseEntity response;
-        UserDTO userDTO = new UserDTO();
-
         when(userService.updateUser(any())).thenReturn(userDTO);
 
         response = userController.updateUser(userDTO);
@@ -142,26 +135,21 @@ public class UserControllerTest {
 
     @Test
     public void updateUserCallsUserServiceUpdateUser() {
-        UserDTO user = new UserDTO();
+        userController.updateUser(userDTO);
 
-        userController.updateUser(user);
-
-        verify(userService).updateUser(user);
+        verify(userService).updateUser(userDTO);
     }
 
     @Test
     public void addUserReturnsStatus200() {
-        ResponseEntity response = userController.addUser(new RegistrationDTO());
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+        response = userController.addUser(new RegistrationDTO());
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void addUserReturnsUserDTO() {
-        ResponseEntity response;
-        UserDTO userDTO = new UserDTO();
-
         when(userService.addUser(any())).thenReturn(userDTO);
 
         response = userController.addUser(new RegistrationDTO());
@@ -180,18 +168,15 @@ public class UserControllerTest {
 
     @Test
     public void getAllUserTransactionsReturnsStatus200() {
-        final int userId = 1;
-        ResponseEntity response = userController.getAllUserTransactions(userId);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+
+        response = userController.getAllUserTransactions(userId);
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void getAllUserTransactionsReturnsListOfTransactions() {
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
-
         when(transactionService.getAllTransactionsByUserId(anyInt())).thenReturn(transactions);
 
         response = userController.getAllUserTransactions(1);
@@ -201,8 +186,6 @@ public class UserControllerTest {
 
     @Test
     public void getAllUserTransactionsCallsUserServiceGetAllUserTransactions() {
-        final int userId = 1;
-
         userController.getAllUserTransactions(userId);
 
         verify(transactionService).getAllTransactionsByUserId(userId);
@@ -210,21 +193,15 @@ public class UserControllerTest {
 
     @Test
     public void getAllUserTransactionsByTypeReturnsStatus200() {
-        final String type = "income";
-        final int userId = 1;
-        ResponseEntity response = userController.getAllUserTransactionsByType(userId, type);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+
+        response = userController.getAllUserTransactionsByType(userId, type);
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void getAllUserTransactionsByTypeReturnsListOfTransactions() {
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
-        final String type = "income";
-        final int userId = 1;
-
         when(transactionService.getAllUserTransactionsByType(userId, type)).thenReturn(transactions);
 
         response = userController.getAllUserTransactionsByType(userId, type);
@@ -234,30 +211,21 @@ public class UserControllerTest {
 
     @Test
     public void getAllUserTransactionsByTypeCallsUserServiceGetAllUserTransactionsByType() {
-        final String type = "income";
-        final int userId = 1;
-
         userController.getAllUserTransactionsByType(userId, type);
+
         verify(transactionService).getAllUserTransactionsByType(userId, type);
     }
 
     @Test
     public void getAllUserTransactionsByOccurrenceReturnsStatus200() {
-        final String occurrence = "monthly";
-        final int userId = 1;
-        ResponseEntity response = userController.getAllUserTransactionsByOccurrence(userId, occurrence);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+        response = userController.getAllUserTransactionsByOccurrence(userId, occurrence);
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void getAllUserTransactionsByOccurrenceReturnsListOfTransactions() {
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
-        final String occurrence = "monthly";
-        final int userId = 1;
-
         when(transactionService.getAllUserTransactionsByOccurrence(userId, occurrence)).thenReturn(transactions);
 
         response = userController.getAllUserTransactionsByOccurrence(userId, occurrence);
@@ -267,30 +235,22 @@ public class UserControllerTest {
 
     @Test
     public void getAllUserTransactionsByOccurrenceCallsUserServiceGetAllUserTransactionsByOccurrence() {
-        final String type = "income";
-        final int userId = 1;
-
         userController.getAllUserTransactionsByOccurrence(userId, type);
+
         verify(transactionService).getAllUserTransactionsByOccurrence(userId, type);
     }
 
     @Test
     public void getAllUserTransactionsByCategoryReturnsStatus200() {
-        final int categoryId = 1;
-        final int userId = 1;
-        ResponseEntity response = userController.getAllUserTransactionsByCategory(userId, categoryId);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
+
+        response = userController.getAllUserTransactionsByCategory(userId, categoryId);
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void getAllUserTransactionsByCategoryReturnsListOfTransactions() {
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
-        final int categoryId = 1;
-        final int userId = 1;
-
         when(transactionService.getAllUserTransactionsByCategory(userId, categoryId)).thenReturn(transactions);
 
         response = userController.getAllUserTransactionsByCategory(userId, categoryId);
@@ -300,10 +260,8 @@ public class UserControllerTest {
 
     @Test
     public void getAllUserTransactionsByCategoryCallsUserServiceGetAllUserTransactionsByCategory() {
-        final int categoryId = 1;
-        final int userId = 1;
-
         userController.getAllUserTransactionsByCategory(userId, categoryId);
+
         verify(transactionService).getAllUserTransactionsByCategory(userId, categoryId);
     }
 
