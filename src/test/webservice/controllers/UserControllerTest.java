@@ -29,11 +29,12 @@ public class UserControllerTest {
     private UserService userService;
     @Mock
     private TransactionService transactionService;
+    @Mock
+    private UserDTO userDTO;
 
     private ResponseEntity response;
     private List<TransactionDTO> transactions = new ArrayList<>();
     private List<UserDTO> users = new ArrayList<>();
-    private UserDTO userDTO = new UserDTO();
     private final int categoryId = 1;
     private final int userId = 1;
     private final String occurrence = "monthly";

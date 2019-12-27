@@ -25,6 +25,18 @@ public class TransactionControllerTest {
     private TransactionController transactionController;
     @Mock
     private TransactionService transactionService;
+    @Mock
+    private TransactionRequestDTO transactionRequestDTO;
+    @Mock
+    private TransactionDTO transactionDTO;
+
+    private ResponseEntity response;
+    private List<TransactionDTO> transactions = new ArrayList<>();
+    private final String type = "income";
+    private final int categoryId = 1;
+    private final String category = "monthly";
+    private final String occurrence = "monthly";
+    private final int transactionId = 1;
 
     @Before
     public void setup() {
@@ -33,16 +45,15 @@ public class TransactionControllerTest {
 
     @Test
     public void getAllTransactionsReturnsStatus200() {
-        ResponseEntity response = transactionController.getAllTransactions();
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.getAllTransactions();
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void getAllTransactionsReturnsListOfTransactions() {
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
 
         when(transactionService.getAllTransactions()).thenReturn(transactions);
 
@@ -54,24 +65,21 @@ public class TransactionControllerTest {
     @Test
     public void getAllTransactionsCallsTransactionServiceGetAllTransactions() {
         transactionController.getAllTransactions();
+
         verify(transactionService).getAllTransactions();
     }
 
     @Test
     public void getAllTransactionsByTypeReturnsStatus200() {
-        final String type = "income";
-        ResponseEntity response = transactionController.getAllTransactionsByType(type);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.getAllTransactionsByType(type);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void getAllTransactionsByTypeReturnsListOfTransactions() {
-        final String type = "income";
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
-
         when(transactionService.getAllTransactionsByType(type)).thenReturn(transactions);
 
         response = transactionController.getAllTransactionsByType(type);
@@ -81,26 +89,22 @@ public class TransactionControllerTest {
 
     @Test
     public void getAllTransactionsByTypeCallsTransactionServiceGetAllTransactionsByType() {
-        final String type = "income";
         transactionController.getAllTransactionsByType(type);
+
         verify(transactionService).getAllTransactionsByType(type);
     }
 
     @Test
     public void getAllTransactionsByOccurrenceReturnsStatus200() {
-        final String occurrence = "monthly";
-        ResponseEntity response = transactionController.getAllTransactionsByOccurrence(occurrence);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.getAllTransactionsByOccurrence(occurrence);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void getAllTransactionsByOccurrenceReturnsListOfTransactions() {
-        final String occurrence = "monthly";
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
-
         when(transactionService.getAllTransactionsByOccurrence(occurrence)).thenReturn(transactions);
 
         response = transactionController.getAllTransactionsByOccurrence(occurrence);
@@ -110,68 +114,56 @@ public class TransactionControllerTest {
 
     @Test
     public void getAllTransactionsByOccurrenceCallsTransactionServiceGetAllTransactionsByOccurrence() {
-        final String occurrence = "occurrence";
         transactionController.getAllTransactionsByOccurrence(occurrence);
+
         verify(transactionService).getAllTransactionsByOccurrence(occurrence);
     }
 
     @Test
     public void getAllTransactionsByCategoryReturnsStatus200() {
-        final String category = "monthly";
-        ResponseEntity response = transactionController.getAllTransactionsByOccurrence(category);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.getAllTransactionsByOccurrence(category);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void getAllTransactionsByCategoryReturnsListOfTransactions() {
-        final int category = 1;
-        ResponseEntity response;
-        List<TransactionDTO> transactions = new ArrayList<>();
+        when(transactionService.getAllTransactionsByCategory(categoryId)).thenReturn(transactions);
 
-        when(transactionService.getAllTransactionsByCategory(category)).thenReturn(transactions);
-
-        response = transactionController.getAllTransactionsByCategory(category);
+        response = transactionController.getAllTransactionsByCategory(categoryId);
 
         Assertions.assertEquals(transactions, response.getBody());
     }
 
     @Test
     public void getAllTransactionsByCategoryCallsTransactionServiceGetAllTransactionsByCategory() {
-        final int category = 1;
+        transactionController.getAllTransactionsByCategory(categoryId);
 
-        transactionController.getAllTransactionsByCategory(category);
-
-        verify(transactionService).getAllTransactionsByCategory(category);
+        verify(transactionService).getAllTransactionsByCategory(categoryId);
     }
 
     @Test
     public void getTransactionReturnsStatus200() {
-        final int transactionId = 1;
-        ResponseEntity response = transactionController.getTransaction(transactionId);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.getTransaction(transactionId);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void getTransactionReturnsTransactionDTO() {
-        final int transactionId = 1;
-        ResponseEntity response;
-        TransactionDTO transaction = new TransactionDTO();
-
-        when(transactionService.getTransaction(transactionId)).thenReturn(transaction);
+        when(transactionService.getTransaction(transactionId)).thenReturn(transactionDTO);
 
         response = transactionController.getTransaction(transactionId);
 
-        Assertions.assertEquals(transaction, response.getBody());
+        Assertions.assertEquals(transactionDTO, response.getBody());
     }
 
     @Test
     public void getTransactionCallsTransactionServiceGetTransaction() {
-        final int transactionId = 1;
-
         transactionController.getTransaction(transactionId);
 
         verify(transactionService).getTransaction(transactionId);
@@ -179,19 +171,15 @@ public class TransactionControllerTest {
 
     @Test
     public void addTransactionReturnsStatus200() {
-        TransactionRequestDTO transaction = new TransactionRequestDTO();
-        ResponseEntity response = transactionController.addTransaction(transaction);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.addTransaction(transactionRequestDTO);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void addTransactionReturnsTransactionDTO() {
-        ResponseEntity response;
-        TransactionDTO transactionDTO = new TransactionDTO();
-        TransactionRequestDTO transactionRequestDTO = new TransactionRequestDTO();
-
         when(transactionService.insertTransaction(transactionRequestDTO)).thenReturn(transactionDTO);
 
         response = transactionController.addTransaction(transactionRequestDTO);
@@ -201,59 +189,47 @@ public class TransactionControllerTest {
 
     @Test
     public void addTransactionCallsTransactionServiceInsertTransaction() {
-        TransactionRequestDTO transaction = new TransactionRequestDTO();
+        transactionController.addTransaction(transactionRequestDTO);
 
-        transactionController.addTransaction(transaction);
-
-        verify(transactionService).insertTransaction(transaction);
+        verify(transactionService).insertTransaction(transactionRequestDTO);
     }
 
     @Test
     public void updateTransactionReturnsStatus200() {
-        final TransactionRequestDTO transaction = new TransactionRequestDTO();
-        ResponseEntity response = transactionController.updateTransaction(transaction);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.updateTransaction(transactionRequestDTO);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void updateTransactionReturnsTransactionDTO() {
+        when(transactionService.updateTransaction(transactionRequestDTO)).thenReturn(transactionDTO);
 
-        ResponseEntity response;
-        TransactionRequestDTO transactionRequest = new TransactionRequestDTO();
-        TransactionDTO transaction = new TransactionDTO();
+        response = transactionController.updateTransaction(transactionRequestDTO);
 
-        when(transactionService.updateTransaction(transactionRequest)).thenReturn(transaction);
-
-        response = transactionController.updateTransaction(transactionRequest);
-
-        Assertions.assertEquals(transaction, response.getBody());
+        Assertions.assertEquals(transactionDTO, response.getBody());
     }
 
     @Test
     public void updateTransactionCallsTransactionServiceUpdateTransaction() {
-        TransactionRequestDTO transaction = new TransactionRequestDTO();
+        transactionController.updateTransaction(transactionRequestDTO);
 
-        transactionController.updateTransaction(transaction);
-
-        verify(transactionService).updateTransaction(transaction);
+        verify(transactionService).updateTransaction(transactionRequestDTO);
     }
 
     @Test
     public void deleteTransactionReturnsStatus200() {
-        final int transactionId = 1;
-        ResponseEntity response = transactionController.deleteTransaction(transactionId);
         final HttpStatus expectedStatusCode = HttpStatus.OK;
+
+        response = transactionController.deleteTransaction(transactionId);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
 
     @Test
     public void deleteTransactionReturnsBoolean() {
-        ResponseEntity response;
-        final int transactionId = 1;
-
         when(transactionService.deleteTransaction(transactionId)).thenReturn(true);
 
         response = transactionController.deleteTransaction(transactionId);
@@ -263,8 +239,6 @@ public class TransactionControllerTest {
 
     @Test
     public void deleteTransactionCallsTransactionServiceGetTransaction() {
-        final int transactionId = 1;
-
         transactionController.deleteTransaction(transactionId);
 
         verify(transactionService).deleteTransaction(transactionId);
@@ -282,7 +256,6 @@ public class TransactionControllerTest {
     @Test
     public void getAllTransactionTypesReturnsListOfTransactionTypes() {
         final List<TransactionTypeDTO> list = new ArrayList<>();
-        ResponseEntity response;
 
         when(transactionService.getAllTransactionTypes()).thenReturn(list);
 
@@ -294,6 +267,7 @@ public class TransactionControllerTest {
     @Test
     public void getAllTransactionTypesCallsTransactionServiceGetAllTransactionTypes() {
         transactionController.getAllTransactionTypes();
+
         verify(transactionService).getAllTransactionTypes();
     }
 
@@ -320,6 +294,7 @@ public class TransactionControllerTest {
     @Test
     public void getAllTransactionOccurrenceTypesCallsTransactionServiceGetAllTransactionOccurrenceTypes() {
         transactionController.getAllTransactionOccurrenceTypes();
+
         verify(transactionService).getAllTransactionOccurrenceTypes();
     }
 
