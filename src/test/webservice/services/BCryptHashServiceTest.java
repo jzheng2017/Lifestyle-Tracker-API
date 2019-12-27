@@ -17,6 +17,9 @@ public class BCryptHashServiceTest {
     @Mock
     private BCryptPasswordEncoder passwordEncoder;
 
+    private final String plain = "plain";
+    private final String encoded = "encoded";
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -24,9 +27,6 @@ public class BCryptHashServiceTest {
 
     @Test
     public void encodeReturnsEncodedString() {
-        final String plain = "plain";
-        final String encoded = "encoded";
-
         when(passwordEncoder.encode(plain)).thenReturn(encoded);
 
         Assertions.assertEquals(encoded, hashService.encode(plain));
@@ -34,16 +34,13 @@ public class BCryptHashServiceTest {
 
     @Test
     public void encodedCallsPasswordEncoderEncodeFunction() {
-        final String plain = "plain";
         hashService.encode(plain);
+
         verify(passwordEncoder).encode(plain);
     }
 
     @Test
     public void validReturnsTrueIfTwoStringMatches() {
-        final String plain = "plain";
-        final String encoded = "encoded";
-
         when(passwordEncoder.matches(plain, encoded)).thenReturn(true);
 
         Assertions.assertTrue(hashService.valid(plain, encoded));
@@ -51,9 +48,6 @@ public class BCryptHashServiceTest {
 
     @Test
     public void validReturnsFalseIfTwoStringDoNotMatch() {
-        final String plain = "plain";
-        final String encoded = "encoded";
-
         when(passwordEncoder.matches(plain, encoded)).thenReturn(false);
 
         Assertions.assertFalse(hashService.valid(plain, encoded));
@@ -61,9 +55,6 @@ public class BCryptHashServiceTest {
 
     @Test
     public void validCallsPasswordEncoderMatchesFunction() {
-        final String plain = "plain";
-        final String encoded = "encoded";
-
         hashService.valid(plain, encoded);
         verify(passwordEncoder).matches(plain, encoded);
     }
