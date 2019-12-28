@@ -121,8 +121,8 @@ public class TransactionService {
     /**
      * Get all transactions by type
      *
-     * @param order
-     * @param orderBy
+     * @param order   order direction, ascending or descending
+     * @param orderBy order by given field
      * @param transactionType type of a transaction (ex. income)
      * @return a list of transactions
      */
@@ -177,8 +177,8 @@ public class TransactionService {
     /**
      * Get all transactions by occurrence type
      *
-     * @param order
-     * @param orderBy
+     * @param order   order direction, ascending or descending
+     * @param orderBy order by given field
      * @param occurrenceType the name of an occurrence type
      * @return a list of transactions
      */
@@ -191,8 +191,8 @@ public class TransactionService {
     /**
      * Get all transactions by category id
      *
-     * @param order
-     * @param orderBy
+     * @param order   order direction, ascending or descending
+     * @param orderBy order by given field
      * @param categoryId the id of a category
      * @return a list of transactions
      */
