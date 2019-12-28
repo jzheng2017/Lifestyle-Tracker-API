@@ -11,6 +11,12 @@ import webservice.services.AuthenticateService;
 
 import javax.validation.Valid;
 
+/**
+ * This controller has been deprecated as of v1.0.0. The authentication process now uses a filter.
+ *
+ * @see webservice.security.filters.AuthenticationFilter
+ */
+@Deprecated
 @RestController
 public class AuthenticationController {
 

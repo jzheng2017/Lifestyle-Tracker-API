@@ -13,6 +13,10 @@ import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.JwtUtil;
 
+/**
+ * This service has been deprecated as of v1.0.0. The authentication process no longer uses this service.
+ */
+@Deprecated
 @Service
 public class AuthenticateService {
 
