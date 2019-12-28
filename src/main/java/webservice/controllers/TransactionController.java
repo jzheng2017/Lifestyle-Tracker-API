@@ -24,23 +24,30 @@ public class TransactionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<TransactionDTO>> getAllTransactions() {
-        return ResponseEntity.ok(transactionService.getAllTransactions());
+    public ResponseEntity<List<TransactionDTO>> getAllTransactions(@RequestParam(name = "order", defaultValue = "asc") String order,
+                                                                   @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
+        return ResponseEntity.ok(transactionService.getAllTransactions(order, orderBy));
     }
 
     @GetMapping("/type/{type}/all")
-    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByType(@PathVariable("type") String transactionType) {
-        return ResponseEntity.ok(transactionService.getAllTransactionsByType(transactionType));
+    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByType(@RequestParam(name = "order", defaultValue = "asc") String order,
+                                                                         @RequestParam(name = "orderBy", defaultValue = "id") String orderBy,
+                                                                         @PathVariable("type") String transactionType) {
+        return ResponseEntity.ok(transactionService.getAllTransactionsByType(order, orderBy, transactionType));
     }
 
     @GetMapping("/occurrence/{occurrence}/all")
-    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByOccurrence(@PathVariable("occurrence") String occurrenceType) {
-        return ResponseEntity.ok(transactionService.getAllTransactionsByOccurrence(occurrenceType));
+    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByOccurrence(@RequestParam(name = "order", defaultValue = "asc") String order,
+                                                                               @RequestParam(name = "orderBy", defaultValue = "id") String orderBy,
+                                                                               @PathVariable("occurrence") String occurrenceType) {
+        return ResponseEntity.ok(transactionService.getAllTransactionsByOccurrence(order, orderBy, occurrenceType));
     }
 
     @GetMapping("/category/{categoryId}/all")
-    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByCategory(@PathVariable("categoryId") int categoryId) {
-        return ResponseEntity.ok(transactionService.getAllTransactionsByCategory(categoryId));
+    public ResponseEntity<List<TransactionDTO>> getAllTransactionsByCategory(@RequestParam(name = "order", defaultValue = "asc") String order,
+                                                                             @RequestParam(name = "orderBy", defaultValue = "id") String orderBy,
+                                                                             @PathVariable("categoryId") int categoryId) {
+        return ResponseEntity.ok(transactionService.getAllTransactionsByCategory(order, orderBy, categoryId));
     }
 
     @GetMapping("{id}")

@@ -30,7 +30,7 @@ public class CategoryController {
      * @return ResponseEntity object containing a list of categories
      */
     @GetMapping("/all")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories(@RequestParam(value = "order", defaultValue = "asc") String order, @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(@RequestParam(name = "order", defaultValue = "asc") String order, @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
         return ResponseEntity.ok(categoryService.getAll(order, orderBy));
     }
 
@@ -57,8 +57,8 @@ public class CategoryController {
      */
     @GetMapping("{id}/children")
     public ResponseEntity<List<CategoryDTO>> getAllChildren(@PathVariable("id") int parentId,
-                                                            @RequestParam(value = "order", defaultValue = "asc") String order,
-                                                            @RequestParam(value = "orderBy", defaultValue = "id") String orderBy) {
+                                                            @RequestParam(name = "order", defaultValue = "asc") String order,
+                                                            @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
         return ResponseEntity.ok(categoryService.getChildren(parentId, order, orderBy));
     }
 

@@ -2,6 +2,7 @@ package webservice.services;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
@@ -120,20 +121,28 @@ public class TransactionService {
     /**
      * Get all transactions by type
      *
+     * @param order
+     * @param orderBy
      * @param transactionType type of a transaction (ex. income)
      * @return a list of transactions
      */
-    public List<TransactionDTO> getAllTransactionsByType(String transactionType) {
-        return transactionRepository.findAllByTransactionType_Type(transactionType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    public List<TransactionDTO> getAllTransactionsByType(String order, String orderBy, String transactionType) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return transactionRepository.findAllByTransactionType_Type(Sort.by(sortDirection, orderBy), transactionType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
     /**
      * Get all transactions
      *
+     * @param order   order direction, ascending or descending
+     * @param orderBy order by given field
      * @return a list of transactions
      */
-    public List<TransactionDTO> getAllTransactions() {
-        return ((List<Transaction>) transactionRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    public List<TransactionDTO> getAllTransactions(String order, String orderBy) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return transactionRepository.findAll(Sort.by(sortDirection, orderBy)).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -168,21 +177,29 @@ public class TransactionService {
     /**
      * Get all transactions by occurrence type
      *
+     * @param order
+     * @param orderBy
      * @param occurrenceType the name of an occurrence type
      * @return a list of transactions
      */
-    public List<TransactionDTO> getAllTransactionsByOccurrence(String occurrenceType) {
-        return transactionRepository.findAllByOccurrence_Name(occurrenceType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    public List<TransactionDTO> getAllTransactionsByOccurrence(String order, String orderBy, String occurrenceType) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return transactionRepository.findAllByOccurrence_Name(Sort.by(sortDirection, orderBy), occurrenceType).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
     /**
      * Get all transactions by category id
      *
+     * @param order
+     * @param orderBy
      * @param categoryId the id of a category
      * @return a list of transactions
      */
-    public List<TransactionDTO> getAllTransactionsByCategory(int categoryId) {
-        return transactionRepository.findAllByCategory_Id(categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
+    public List<TransactionDTO> getAllTransactionsByCategory(String order, String orderBy, int categoryId) {
+        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        return transactionRepository.findAllByCategory_Id(Sort.by(sortDirection, orderBy), categoryId).stream().map(entity -> modelMapper.map(entity, TransactionDTO.class)).collect(Collectors.toList());
     }
 
     /**
