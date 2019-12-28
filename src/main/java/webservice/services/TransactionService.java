@@ -15,7 +15,6 @@ import webservice.repositories.TransactionOccurrenceTypeRepository;
 import webservice.repositories.TransactionRepository;
 import webservice.repositories.TransactionTypeRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,6 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     private TransactionTypeRepository transactionTypeRepository;
     private TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository;
-    private EntityManager entityManager;
     private ModelMapper modelMapper;
 
     @Autowired
@@ -41,11 +39,6 @@ public class TransactionService {
     @Autowired
     public void setTransactionOccurrenceTypeRepository(TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository) {
         this.transactionOccurrenceTypeRepository = transactionOccurrenceTypeRepository;
-    }
-
-    @Autowired
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 
     @Autowired
@@ -214,6 +207,4 @@ public class TransactionService {
 
         return modelMapper.map(transactionRepository.save(transaction), TransactionDTO.class);
     }
-
-
 }
