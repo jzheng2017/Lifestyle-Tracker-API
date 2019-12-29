@@ -31,7 +31,7 @@ public class TransactionController {
      * @param orderBy the field that should be ordered on
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<TransactionDTO>> getAllTransactions(@RequestParam(name = "order", defaultValue = "asc") String order,
                                                                    @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
         return ResponseEntity.ok(transactionService.getAllTransactions(order, orderBy));
@@ -47,7 +47,7 @@ public class TransactionController {
      * @param transactionType the type of a transaction (ex. income)
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("/type/{type}/all")
+    @GetMapping("/type/{type}")
     public ResponseEntity<List<TransactionDTO>> getAllTransactionsByType(@RequestParam(name = "order", defaultValue = "asc") String order,
                                                                          @RequestParam(name = "orderBy", defaultValue = "id") String orderBy,
                                                                          @PathVariable("type") String transactionType) {
@@ -64,7 +64,7 @@ public class TransactionController {
      * @param occurrenceType the occurrence of a transaction (ex. monthly)
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("/occurrence/{occurrence}/all")
+    @GetMapping("/occurrence/{occurrence}")
     public ResponseEntity<List<TransactionDTO>> getAllTransactionsByOccurrence(@RequestParam(name = "order", defaultValue = "asc") String order,
                                                                                @RequestParam(name = "orderBy", defaultValue = "id") String orderBy,
                                                                                @PathVariable("occurrence") String occurrenceType) {
@@ -81,7 +81,7 @@ public class TransactionController {
      * @param categoryId the id of a category
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("/category/{categoryId}/all")
+    @GetMapping("/category/{categoryId}")
     public ResponseEntity<List<TransactionDTO>> getAllTransactionsByCategory(@RequestParam(name = "order", defaultValue = "asc") String order,
                                                                              @RequestParam(name = "orderBy", defaultValue = "id") String orderBy,
                                                                              @PathVariable("categoryId") int categoryId) {
@@ -105,7 +105,7 @@ public class TransactionController {
      * @param transaction the request object containing the transaction
      * @return ResponseEntity object containing the added transaction
      */
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<TransactionDTO> addTransaction(@RequestBody TransactionRequestDTO transaction) {
         return ResponseEntity.ok(transactionService.insertTransaction(transaction));
     }
@@ -116,7 +116,7 @@ public class TransactionController {
      * @param transaction the request object containing a transaction with new values
      * @return ResponseEntity object containing the updated transaction
      */
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<TransactionDTO> updateTransaction(@RequestBody TransactionRequestDTO transaction) {
         return ResponseEntity.ok(transactionService.updateTransaction(transaction));
     }

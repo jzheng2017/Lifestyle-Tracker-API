@@ -15,10 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     private UserService userService;
     private TransactionService transactionService;
-
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -35,7 +33,7 @@ public class UserController {
      *
      * @return ResponseEntity object containing a list of users
      */
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
@@ -79,7 +77,7 @@ public class UserController {
      * @param user object containing the registration values
      * @return registered user
      */
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<UserDTO> addUser(@Valid @RequestBody RegistrationDTO user) {
         return ResponseEntity.ok(userService.addUser(user));
     }
@@ -102,7 +100,7 @@ public class UserController {
      * @param transactionType the type of a transaction (ex. income)
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("{id}/transactions/type/{type}/all")
+    @GetMapping("{id}/transactions/type/{type}")
     public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByType(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
     }
@@ -114,7 +112,7 @@ public class UserController {
      * @param occurrenceType the occurrence type of a transactions (ex. monthly)
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("{id}/transactions/occurrence/{occurrence}/all")
+    @GetMapping("{id}/transactions/occurrence/{occurrence}")
     public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByOccurrence(@PathVariable("id") int userId, @PathVariable("occurrence") String occurrenceType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurrence(userId, occurrenceType));
     }
@@ -126,7 +124,7 @@ public class UserController {
      * @param categoryId the id of a category
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("{userId}/transactions/category/{categoryId}/all")
+    @GetMapping("{userId}/transactions/category/{categoryId}")
     public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByCategory(userId, categoryId));
     }

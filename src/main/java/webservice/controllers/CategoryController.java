@@ -29,7 +29,7 @@ public class CategoryController {
      * @param orderBy the field that should be ordered on
      * @return ResponseEntity object containing a list of categories
      */
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<CategoryDTO>> getAllCategories(@RequestParam(name = "order", defaultValue = "asc") String order, @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
         return ResponseEntity.ok(categoryService.getAll(order, orderBy));
     }
@@ -68,7 +68,7 @@ public class CategoryController {
      * @param categoryDTO the category request object
      * @return ResponseEntity object containing the added category
      */
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
     }
@@ -79,7 +79,7 @@ public class CategoryController {
      * @param categoryDTO the category containing the new values
      * @return ResponseEntity object containing the updated category
      */
-    @PutMapping("/update")
+    @PutMapping
     public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         return ResponseEntity.ok(categoryService.updateCategory(categoryDTO));
     }
@@ -90,7 +90,7 @@ public class CategoryController {
      * @param categoryId the id of a category
      * @return ResponseEntity object containing a boolean value whether the category has been successfully deleted
      */
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Boolean> deleteCategory(@PathVariable("id") int categoryId) {
         return ResponseEntity.ok(categoryService.deleteCategory(categoryId));
     }
