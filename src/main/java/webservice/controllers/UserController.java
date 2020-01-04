@@ -44,8 +44,8 @@ public class UserController {
      * @param userId the id of a user
      * @return ResponseEntity object containing a user
      */
-    @GetMapping("{id}")
-    public ResponseEntity<UserDTO> getUser(@PathVariable("id") int userId) {
+    @GetMapping("{userId}")
+    public ResponseEntity<UserDTO> getUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userService.getUser(userId));
     }
 
@@ -55,8 +55,8 @@ public class UserController {
      * @param userId the id of a user
      * @return a boolean value, true if user has been deleted, otherwise false
      */
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteUser(@PathVariable("id") int userId) {
+    @DeleteMapping("{userId}")
+    public ResponseEntity<Boolean> deleteUser(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(userService.deleteUser(userId));
     }
 
@@ -66,7 +66,7 @@ public class UserController {
      * @param user object containing the new values
      * @return user object containing the updated values
      */
-    @PutMapping("update")
+    @PutMapping
     public ResponseEntity<UserDTO> updateUser(@Valid @RequestBody UserDTO user) {
         return ResponseEntity.ok(userService.updateUser(user));
     }
@@ -88,8 +88,8 @@ public class UserController {
      * @param userId the id of a user
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("{id}/transactions")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactions(@PathVariable("id") int userId) {
+    @GetMapping("{userId}/transactions")
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactions(@PathVariable("userId") int userId) {
         return ResponseEntity.ok(transactionService.getAllTransactionsByUserId(userId));
     }
 
@@ -100,8 +100,8 @@ public class UserController {
      * @param transactionType the type of a transaction (ex. income)
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("{id}/transactions/type/{type}")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByType(@PathVariable("id") int userId, @PathVariable("type") String transactionType) {
+    @GetMapping("{userId}/transactions/type/{type}")
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByType(@PathVariable("userId") int userId, @PathVariable("type") String transactionType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
     }
 
@@ -112,8 +112,8 @@ public class UserController {
      * @param occurrenceType the occurrence type of a transactions (ex. monthly)
      * @return ResponseEntity object containing a list of transactions
      */
-    @GetMapping("{id}/transactions/occurrence/{occurrence}")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByOccurrence(@PathVariable("id") int userId, @PathVariable("occurrence") String occurrenceType) {
+    @GetMapping("{userId}/transactions/occurrence/{occurrence}")
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByOccurrence(@PathVariable("userId") int userId, @PathVariable("occurrence") String occurrenceType) {
         return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurrence(userId, occurrenceType));
     }
 
