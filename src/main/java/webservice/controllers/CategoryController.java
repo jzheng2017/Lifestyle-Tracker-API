@@ -1,10 +1,14 @@
 package webservice.controllers;
 
 
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webservice.dto.CategoryDTO;
+import webservice.entities.Category;
 import webservice.services.CategoryService;
 
 import javax.validation.Valid;
@@ -25,13 +29,13 @@ public class CategoryController {
      * <br>
      * If the order or order by field is not specified, it will use the default value
      *
-     * @param order   the order in which the list should be ordered (ex. ascending)
-     * @param orderBy the field that should be ordered on
+     * @param predicate the criteria on which the query should filter
+     * @param pageable  pagination of the results
      * @return ResponseEntity object containing a list of categories
      */
     @GetMapping
-    public ResponseEntity<List<CategoryDTO>> getAllCategories(@RequestParam(name = "order", defaultValue = "asc") String order, @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
-        return ResponseEntity.ok(categoryService.getAll(order, orderBy));
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(@QuerydslPredicate(root = Category.class) Predicate predicate, Pageable pageable) {
+        return ResponseEntity.ok(categoryService.getAll(predicate, pageable));
     }
 
     /**
@@ -43,23 +47,6 @@ public class CategoryController {
     @GetMapping("{id}")
     public ResponseEntity<CategoryDTO> getCategory(@PathVariable("id") int categoryId) {
         return ResponseEntity.ok(categoryService.getCategory(categoryId));
-    }
-
-    /**
-     * Get all children of a category
-     * <br>
-     * If the order or order by field is not specified, it will use the default value
-     *
-     * @param parentId the id of a parent category
-     * @param order    the order in which the list should be ordered (ex. ascending)
-     * @param orderBy  the field that should be ordered on
-     * @return ResponseEntity object containing a list of categories
-     */
-    @GetMapping("{id}/children")
-    public ResponseEntity<List<CategoryDTO>> getAllChildren(@PathVariable("id") int parentId,
-                                                            @RequestParam(name = "order", defaultValue = "asc") String order,
-                                                            @RequestParam(name = "orderBy", defaultValue = "id") String orderBy) {
-        return ResponseEntity.ok(categoryService.getChildren(parentId, order, orderBy));
     }
 
     /**

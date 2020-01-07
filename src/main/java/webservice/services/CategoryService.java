@@ -1,11 +1,13 @@
 package webservice.services;
 
+import com.querydsl.core.types.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import webservice.dto.CategoryDTO;
 import webservice.entities.Category;
+import webservice.entities.QCategory;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.CategoryRepository;
 
@@ -32,14 +34,13 @@ public class CategoryService {
     /**
      * Get all categories
      *
-     * @param order   order direction, ascending or descending
-     * @param orderBy order by given field
+     * @param predicate the criteria on which the query should filter
+     * @param pageable  pagination of the results
      * @return a list of categories
      */
-    public List<CategoryDTO> getAll(String order, String orderBy) {
-        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-
-        return categoryRepository.findAll(Sort.by(sortDirection, orderBy)).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
+    public List<CategoryDTO> getAll(Predicate predicate, Pageable pageable) {
+        predicate = returnPredicateWhenNull(predicate);
+        return categoryRepository.findAll(predicate, pageable).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -50,20 +51,6 @@ public class CategoryService {
      */
     public CategoryDTO getCategory(int categoryId) {
         return modelMapper.map(categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found")), CategoryDTO.class);
-    }
-
-    /**
-     * Get all children of a category
-     *
-     * @param parentId the id of a parent category
-     * @param order    order direction, ascending or descending
-     * @param orderBy  order by given field
-     * @return a list of categories
-     */
-    public List<CategoryDTO> getChildren(int parentId, String order, String orderBy) {
-        Sort.Direction sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-
-        return categoryRepository.findAllByParentId(parentId, Sort.by(sortDirection, orderBy)).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -113,5 +100,12 @@ public class CategoryService {
      */
     private CategoryDTO createUpdate(CategoryDTO categoryDTO) {
         return modelMapper.map(categoryRepository.save(modelMapper.map(categoryDTO, Category.class)), CategoryDTO.class);
+    }
+
+    private Predicate returnPredicateWhenNull(Predicate predicate) {
+        if (predicate == null) {
+            return QCategory.category.id.ne(-1); // bug workaround of QueryDSL Web Support, it returns null when no matching criteria is passed in
+        }
+        return predicate;
     }
 }
