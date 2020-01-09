@@ -40,7 +40,7 @@ public class CategoryService {
      */
     public List<CategoryDTO> getAll(Predicate predicate, Pageable pageable) {
         predicate = returnPredicateWhenNull(predicate);
-        return categoryRepository.findAll(predicate, pageable).stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
+        return categoryRepository.findAll(predicate, pageable).getContent().stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -51,6 +51,19 @@ public class CategoryService {
      */
     public CategoryDTO getCategory(int categoryId) {
         return modelMapper.map(categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found")), CategoryDTO.class);
+    }
+
+    /**
+     * Get all children of a category
+     *
+     * @param parentId the id of a parent category
+     * @param predicate the criteria on which the query should filter
+     * @param pageable  pagination of the results
+     * @return a list of categories
+     */
+    public List<CategoryDTO> getChildren(int parentId, Predicate predicate, Pageable pageable) {
+        predicate = QCategory.category.parent.id.eq(parentId).and(predicate);
+        return categoryRepository.findAll(predicate, pageable).getContent().stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
     }
 
     /**
