@@ -50,6 +50,21 @@ public class CategoryController {
     }
 
     /**
+     * Get all children of a category
+     * <br>
+     * If the order or order by field is not specified, it will use the default value
+     *
+     * @param parentId the id of a parent category
+     * @param predicate the criteria on which the query should filter
+     * @param pageable  pagination of the results
+     * @return ResponseEntity object containing a list of categories
+     */
+    @GetMapping("{id}/children")
+    public ResponseEntity<List<CategoryDTO>> getAllChildren(@PathVariable("id") int parentId, @QuerydslPredicate(root = Category.class) Predicate predicate, Pageable pageable) {
+        return ResponseEntity.ok(categoryService.getChildren(parentId, predicate, pageable));
+    }
+
+    /**
      * Create a category
      *
      * @param categoryDTO the category request object
