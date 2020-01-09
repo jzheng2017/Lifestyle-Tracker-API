@@ -1,11 +1,13 @@
 package webservice.controllers;
 
+import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import webservice.dto.CategoryDTO;
@@ -22,8 +24,10 @@ public class CategoryControllerTest {
     private CategoryController categoryController;
     @Mock
     private CategoryService categoryService;
-    private final String order = "asc";
-    private final String orderBy = "id";
+    @Mock
+    private Predicate predicate;
+    @Mock
+    private Pageable pageable;
 
     @Before
     public void setup() {
@@ -33,7 +37,7 @@ public class CategoryControllerTest {
     @Test
     public void getAllCategoriesReturnsStatus200() {
         final HttpStatus expectedStatusCode = HttpStatus.OK;
-        final HttpStatus actualStatusCode = categoryController.getAllCategories(order, orderBy).getStatusCode();
+        final HttpStatus actualStatusCode = categoryController.getAllCategories(predicate, pageable).getStatusCode();
 
         Assertions.assertEquals(expectedStatusCode, actualStatusCode);
     }
@@ -43,17 +47,46 @@ public class CategoryControllerTest {
         final List<CategoryDTO> list = new ArrayList<>();
         ResponseEntity response;
 
-        when(categoryService.getAll(order, orderBy)).thenReturn(list);
+        when(categoryService.getAll(predicate, pageable)).thenReturn(list);
 
-        response = categoryController.getAllCategories(order, orderBy);
+        response = categoryController.getAllCategories(predicate, pageable);
 
         Assertions.assertEquals(list, response.getBody());
     }
 
     @Test
     public void getAllCategoriesCallsCategoryServiceGetAll() {
-        categoryController.getAllCategories(order, orderBy);
-        verify(categoryService).getAll(order, orderBy);
+        categoryController.getAllCategories(predicate, pageable);
+        verify(categoryService).getAll(predicate, pageable);
+    }
+
+    @Test
+    public void getAllChildrenReturnsStatus200() {
+        final HttpStatus expectedStatusCode = HttpStatus.OK;
+        final int parentId = 1;
+        final HttpStatus actualStatusCode = categoryController.getAllChildren(parentId, predicate, pageable).getStatusCode();
+
+        Assertions.assertEquals(expectedStatusCode, actualStatusCode);
+    }
+
+    @Test
+    public void getAllChildrenReturnsListOfCategories() {
+        final List<CategoryDTO> list = new ArrayList<>();
+        final int parentId = 1;
+        ResponseEntity response;
+
+        when(categoryService.getChildren(parentId, predicate, pageable)).thenReturn(list);
+
+        response = categoryController.getAllChildren(parentId, predicate, pageable);
+
+        Assertions.assertEquals(list, response.getBody());
+    }
+
+    @Test
+    public void getAllChildrenCallsCategoryServiceGetAll() {
+        final int parentId = 1;
+        categoryController.getAllChildren(parentId, predicate, pageable);
+        verify(categoryService).getChildren(parentId, predicate, pageable);
     }
 
     @Test
@@ -86,38 +119,9 @@ public class CategoryControllerTest {
     }
 
     @Test
-    public void getAllChildrenReturnsStatus200() {
-        final HttpStatus expectedStatusCode = HttpStatus.OK;
-        final int parentId = 1;
-        final HttpStatus actualStatusCode = categoryController.getAllChildren(parentId, order, orderBy).getStatusCode();
-
-        Assertions.assertEquals(expectedStatusCode, actualStatusCode);
-    }
-
-    @Test
-    public void getAllChildrenReturnsListOfCategories() {
-        final List<CategoryDTO> list = new ArrayList<>();
-        final int parentId = 1;
-        ResponseEntity response;
-
-        when(categoryService.getChildren(parentId, order, orderBy)).thenReturn(list);
-
-        response = categoryController.getAllChildren(parentId, order, orderBy);
-
-        Assertions.assertEquals(list, response.getBody());
-    }
-
-    @Test
-    public void getAllChildrenCallsCategoryServiceGetAll() {
-        final int parentId = 1;
-        categoryController.getAllChildren(parentId, order, orderBy);
-        verify(categoryService).getChildren(parentId, order, orderBy);
-    }
-
-    @Test
     public void createCategoryReturnsStatus200() {
         final HttpStatus expectedStatusCode = HttpStatus.OK;
-        final CategoryDTO category =  new CategoryDTO();
+        final CategoryDTO category = new CategoryDTO();
         final HttpStatus actualStatusCode = categoryController.createCategory(category).getStatusCode();
 
         Assertions.assertEquals(expectedStatusCode, actualStatusCode);
@@ -145,7 +149,7 @@ public class CategoryControllerTest {
     @Test
     public void updateCategoryReturnsStatus200() {
         final HttpStatus expectedStatusCode = HttpStatus.OK;
-        final CategoryDTO category =  new CategoryDTO();
+        final CategoryDTO category = new CategoryDTO();
         final HttpStatus actualStatusCode = categoryController.updateCategory(category).getStatusCode();
 
         Assertions.assertEquals(expectedStatusCode, actualStatusCode);
@@ -181,7 +185,8 @@ public class CategoryControllerTest {
 
     @Test
     public void deleteCategoryReturnsCategoryDTO() {
-        final int categoryId = 1;;
+        final int categoryId = 1;
+        ;
         final ResponseEntity response;
 
         when(categoryService.deleteCategory(categoryId)).thenReturn(true);
