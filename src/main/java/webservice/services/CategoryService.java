@@ -40,7 +40,9 @@ public class CategoryService {
      */
     public List<CategoryDTO> getAll(Predicate predicate, Pageable pageable) {
         predicate = returnPredicateWhenNull(predicate);
-        return categoryRepository.findAll(predicate, pageable).getContent().stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
+        List<Category> categories = categoryRepository.findAll(predicate, pageable).getContent();
+
+        return mapToCategoryDTOList(categories);
     }
 
     /**
@@ -50,20 +52,24 @@ public class CategoryService {
      * @return a specific category
      */
     public CategoryDTO getCategory(int categoryId) {
-        return modelMapper.map(categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found")), CategoryDTO.class);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+
+        return mapToCategoryDTO(category);
     }
 
     /**
      * Get all children of a category
      *
-     * @param parentId the id of a parent category
+     * @param parentId  the id of a parent category
      * @param predicate the criteria on which the query should filter
      * @param pageable  pagination of the results
      * @return a list of categories
      */
     public List<CategoryDTO> getChildren(int parentId, Predicate predicate, Pageable pageable) {
         predicate = QCategory.category.parent.id.eq(parentId).and(predicate);
-        return categoryRepository.findAll(predicate, pageable).getContent().stream().map(entity -> modelMapper.map(entity, CategoryDTO.class)).collect(Collectors.toList());
+        List<Category> categories = categoryRepository.findAll(predicate, pageable).getContent();
+
+        return mapToCategoryDTOList(categories);
     }
 
     /**
@@ -112,7 +118,22 @@ public class CategoryService {
      * @return the added or updated category
      */
     private CategoryDTO createUpdate(CategoryDTO categoryDTO) {
-        return modelMapper.map(categoryRepository.save(modelMapper.map(categoryDTO, Category.class)), CategoryDTO.class);
+        Category categoryEntity = mapToCategoryEntity(categoryDTO);
+        Category savedCategory = categoryRepository.save(categoryEntity);
+
+        return mapToCategoryDTO(savedCategory);
+    }
+
+    private List<CategoryDTO> mapToCategoryDTOList(List<Category> categories) {
+        return categories.stream().map(this::mapToCategoryDTO).collect(Collectors.toList());
+    }
+
+    private CategoryDTO mapToCategoryDTO(Category category) {
+        return modelMapper.map(category, CategoryDTO.class);
+    }
+
+    private Category mapToCategoryEntity(CategoryDTO categoryDTO) {
+        return modelMapper.map(categoryDTO, Category.class);
     }
 
     private Predicate returnPredicateWhenNull(Predicate predicate) {
