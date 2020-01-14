@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class AuthorizationFilter extends BasicAuthenticationFilter {
     private static final String TOKEN_PREFIX = "Bearer ";
-    private static final String HEADER_STRING = "Authorization";
+    private static final String AUTHORIZATION_HEADER_STRING = "Authorization";
     private JwtUtil jwtUtil;
 
 
@@ -28,9 +28,10 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(HEADER_STRING);
+        String header = req.getHeader(AUTHORIZATION_HEADER_STRING);
+        final boolean isValidHeader = header == null || !header.startsWith(TOKEN_PREFIX);
 
-        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+        if (isValidHeader) {
             chain.doFilter(req, res);
             return;
         }
@@ -42,17 +43,11 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request) {
-        String token = request.getHeader(HEADER_STRING);
+        String header = request.getHeader(AUTHORIZATION_HEADER_STRING);
 
-        if (token != null) {
-            // parse the token.
-            token = token.replace(TOKEN_PREFIX, "");
-            String user;
-            if (jwtUtil.isTokenValid(token)) {
-                user = jwtUtil.getBodyFromToken(token).getSubject();
-            } else {
-                user = null;
-            }
+        if (header != null) {
+            String token = getTokenFromHeaderString(header);
+            String user = getSubjectFromJwtTokenIfTokenIsValid(token);
 
             if (user != null) {
                 return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
@@ -60,5 +55,18 @@ public class AuthorizationFilter extends BasicAuthenticationFilter {
             return null;
         }
         return null;
+    }
+
+    private String getTokenFromHeaderString(String header) {
+        return header.replace(TOKEN_PREFIX, "");
+    }
+
+
+    private String getSubjectFromJwtTokenIfTokenIsValid(String token) {
+        if (jwtUtil.isTokenValid(token)) {
+            return jwtUtil.getBodyFromToken(token).getSubject();
+        } else {
+            return null;
+        }
     }
 }
