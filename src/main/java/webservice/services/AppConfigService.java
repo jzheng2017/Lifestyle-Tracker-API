@@ -19,13 +19,13 @@ public class AppConfigService {
      * @return expiration time in seconds
      */
     public int getTokenExpiration() {
-        final int expirationTime = Integer.parseInt(appConfig.getExpiration());
-        final int defaultExpirationTime = 3600; // 1 hour
+        final int expirationTimeInSeconds = Integer.parseInt(appConfig.getExpiration());
+        final int defaultExpirationTimeInSeconds = 3600; // 1 hour
 
-        if (expirationTime > 0) {
-            return expirationTime;
+        if (expirationTimeInSeconds > 0) {
+            return expirationTimeInSeconds;
         } else {
-            return defaultExpirationTime; //default to 1 hour if expiration time config is empty or 0
+            return defaultExpirationTimeInSeconds; //default to 1 hour if expiration time config is empty or 0
         }
     }
 }
