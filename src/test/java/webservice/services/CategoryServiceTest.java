@@ -81,6 +81,17 @@ public class CategoryServiceTest {
     }
 
     @Test
+    public void getAllPassesPredicateWithContentToRepositoryWhenPredicateIsInitiallyNull() {
+        final Predicate expectedPredicate = QCategory.category.id.ne(-1);
+
+        when(categoryRepository.findAll(expectedPredicate, pageable)).thenReturn(pageList);
+
+        categoryService.getAll(null, pageable);
+
+        verify(categoryRepository).findAll(expectedPredicate, pageable);
+    }
+
+    @Test
     public void getAllMapsTheReturnedValues() {
         when(categoryRepository.findAll(predicate, pageable)).thenReturn(pageList);
 
@@ -136,7 +147,7 @@ public class CategoryServiceTest {
 
         when(categoryRepository.findAll(expectedPredicate, pageable)).thenReturn(pageList);
 
-        categoryService.getChildren(parentId, predicate, pageable);
+        categoryService.getChildren(parentId, null, pageable);
 
         verify(categoryRepository).findAll(expectedPredicate, pageable);
     }
@@ -154,8 +165,9 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void createCategoryCallsCreateUpdateFunction() {
-//        categoryService.createCategory(mockedCategoryDTO);
-//        verify(categoryService).c
+    public void createCategoryCallsRepositorySaveFunction() {
+        when(modelMapper.map(mockedCategoryDTO, Category.class)).thenReturn(mockedCategory);
+        categoryService.createCategory(mockedCategoryDTO);
+        verify(categoryRepository).save(mockedCategory);
     }
 }
