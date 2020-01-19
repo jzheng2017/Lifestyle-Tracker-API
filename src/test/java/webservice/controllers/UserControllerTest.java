@@ -53,7 +53,7 @@ public class UserControllerTest {
 
     @Test
     public void getAllUsersReturnsStatus200() {
-        ResponseEntity response = userController.getAllUsers();
+        ResponseEntity response = userController.getAllUsers(predicate, pageable);
         final HttpStatus expectedHttpCode = HttpStatus.OK;
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
@@ -61,15 +61,15 @@ public class UserControllerTest {
 
     @Test
     public void getAllUsersCallsUserServiceGetAllUsers() {
-        userController.getAllUsers();
-        verify(userService).getAllUsers();
+        userController.getAllUsers(predicate, pageable);
+        verify(userService).getAllUsers(predicate, pageable);
     }
 
     @Test
     public void getAllUsersReturnsListOfUsers() {
-        when(userService.getAllUsers()).thenReturn(users);
+        when(userService.getAllUsers(predicate, pageable)).thenReturn(users);
 
-        response = userController.getAllUsers();
+        response = userController.getAllUsers(predicate, pageable);
 
         Assertions.assertEquals(users, response.getBody());
     }
