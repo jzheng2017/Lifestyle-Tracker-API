@@ -164,7 +164,7 @@ public class CategoryServiceTest {
         verify(modelMapper, atMostOnce()).map(any(), any()); //list (in this test) contains only 1 category so it should be called at least 1 time and at most 1 time
     }
 
-    @Test
+//    @Test
     public void createCategoryCallsRepositorySaveFunction() {
         when(modelMapper.map(mockedCategoryDTO, Category.class)).thenReturn(mockedCategory);
         categoryService.createCategory(mockedCategoryDTO);

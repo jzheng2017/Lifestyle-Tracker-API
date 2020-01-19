@@ -1,11 +1,13 @@
 package webservice.controllers;
 
+import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import webservice.dto.RegistrationDTO;
@@ -31,6 +33,10 @@ public class UserControllerTest {
     private TransactionService transactionService;
     @Mock
     private UserDTO userDTO;
+    @Mock
+    private Predicate predicate;
+    @Mock
+    private Pageable pageable;
 
     private ResponseEntity response;
     private List<TransactionDTO> transactions = new ArrayList<>();
@@ -171,100 +177,24 @@ public class UserControllerTest {
     public void getAllUserTransactionsReturnsStatus200() {
         final HttpStatus expectedHttpCode = HttpStatus.OK;
 
-        response = userController.getAllUserTransactions(userId);
+        response = userController.getAllUserTransactions(userId, predicate, pageable);
 
         Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
     }
 
     @Test
     public void getAllUserTransactionsReturnsListOfTransactions() {
-        when(transactionService.getAllTransactionsByUserId(anyInt())).thenReturn(transactions);
+        when(transactionService.getAllTransactionsByUserId(userId, predicate, pageable)).thenReturn(transactions);
 
-        response = userController.getAllUserTransactions(1);
+        response = userController.getAllUserTransactions(userId, predicate, pageable);
 
         Assertions.assertEquals(transactions, response.getBody());
     }
 
     @Test
     public void getAllUserTransactionsCallsUserServiceGetAllUserTransactions() {
-        userController.getAllUserTransactions(userId);
+        userController.getAllUserTransactions(userId, predicate, pageable);
 
-        verify(transactionService).getAllTransactionsByUserId(userId);
+        verify(transactionService).getAllTransactionsByUserId(userId, predicate, pageable);
     }
-
-    @Test
-    public void getAllUserTransactionsByTypeReturnsStatus200() {
-        final HttpStatus expectedHttpCode = HttpStatus.OK;
-
-        response = userController.getAllUserTransactionsByType(userId, type);
-
-        Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllUserTransactionsByTypeReturnsListOfTransactions() {
-        when(transactionService.getAllUserTransactionsByType(userId, type)).thenReturn(transactions);
-
-        response = userController.getAllUserTransactionsByType(userId, type);
-
-        Assertions.assertEquals(transactions, response.getBody());
-    }
-
-    @Test
-    public void getAllUserTransactionsByTypeCallsUserServiceGetAllUserTransactionsByType() {
-        userController.getAllUserTransactionsByType(userId, type);
-
-        verify(transactionService).getAllUserTransactionsByType(userId, type);
-    }
-
-    @Test
-    public void getAllUserTransactionsByOccurrenceReturnsStatus200() {
-        final HttpStatus expectedHttpCode = HttpStatus.OK;
-        response = userController.getAllUserTransactionsByOccurrence(userId, occurrence);
-
-        Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllUserTransactionsByOccurrenceReturnsListOfTransactions() {
-        when(transactionService.getAllUserTransactionsByOccurrence(userId, occurrence)).thenReturn(transactions);
-
-        response = userController.getAllUserTransactionsByOccurrence(userId, occurrence);
-
-        Assertions.assertEquals(transactions, response.getBody());
-    }
-
-    @Test
-    public void getAllUserTransactionsByOccurrenceCallsUserServiceGetAllUserTransactionsByOccurrence() {
-        userController.getAllUserTransactionsByOccurrence(userId, type);
-
-        verify(transactionService).getAllUserTransactionsByOccurrence(userId, type);
-    }
-
-    @Test
-    public void getAllUserTransactionsByCategoryReturnsStatus200() {
-        final HttpStatus expectedHttpCode = HttpStatus.OK;
-
-        response = userController.getAllUserTransactionsByCategory(userId, categoryId);
-
-        Assertions.assertEquals(expectedHttpCode, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllUserTransactionsByCategoryReturnsListOfTransactions() {
-        when(transactionService.getAllUserTransactionsByCategory(userId, categoryId)).thenReturn(transactions);
-
-        response = userController.getAllUserTransactionsByCategory(userId, categoryId);
-
-        Assertions.assertEquals(transactions, response.getBody());
-    }
-
-    @Test
-    public void getAllUserTransactionsByCategoryCallsUserServiceGetAllUserTransactionsByCategory() {
-        userController.getAllUserTransactionsByCategory(userId, categoryId);
-
-        verify(transactionService).getAllUserTransactionsByCategory(userId, categoryId);
-    }
-
-
 }

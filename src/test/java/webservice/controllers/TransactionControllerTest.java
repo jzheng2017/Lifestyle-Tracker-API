@@ -1,11 +1,13 @@
 package webservice.controllers;
 
+import com.querydsl.core.types.Predicate;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import webservice.dto.OccurrenceDTO;
@@ -29,6 +31,10 @@ public class TransactionControllerTest {
     private TransactionRequestDTO transactionRequestDTO;
     @Mock
     private TransactionDTO transactionDTO;
+    @Mock
+    private Predicate predicate;
+    @Mock
+    private Pageable pageable;
 
     private ResponseEntity response;
     private List<TransactionDTO> transactions = new ArrayList<>();
@@ -49,7 +55,7 @@ public class TransactionControllerTest {
     public void getAllTransactionsReturnsStatus200() {
         final HttpStatus expectedStatusCode = HttpStatus.OK;
 
-        response = transactionController.getAllTransactions(order, orderBy);
+        response = transactionController.getAllTransactions(predicate, pageable);
 
         Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
     }
@@ -57,93 +63,18 @@ public class TransactionControllerTest {
     @Test
     public void getAllTransactionsReturnsListOfTransactions() {
 
-        when(transactionService.getAllTransactions(order, orderBy)).thenReturn(transactions);
+        when(transactionService.getAllTransactions(predicate, pageable)).thenReturn(transactions);
 
-        response = transactionController.getAllTransactions(order, orderBy);
+        response = transactionController.getAllTransactions(predicate, pageable);
 
         Assertions.assertEquals(transactions, response.getBody());
     }
 
     @Test
     public void getAllTransactionsCallsTransactionServiceGetAllTransactions() {
-        transactionController.getAllTransactions(order, orderBy);
+        transactionController.getAllTransactions(predicate, pageable);
 
-        verify(transactionService).getAllTransactions(order, orderBy);
-    }
-
-    @Test
-    public void getAllTransactionsByTypeReturnsStatus200() {
-        final HttpStatus expectedStatusCode = HttpStatus.OK;
-
-        response = transactionController.getAllTransactionsByType(order, orderBy, type);
-
-        Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllTransactionsByTypeReturnsListOfTransactions() {
-        when(transactionService.getAllTransactionsByType(order, orderBy, type)).thenReturn(transactions);
-
-        response = transactionController.getAllTransactionsByType(order, orderBy, type);
-
-        Assertions.assertEquals(transactions, response.getBody());
-    }
-
-    @Test
-    public void getAllTransactionsByTypeCallsTransactionServiceGetAllTransactionsByType() {
-        transactionController.getAllTransactionsByType(order, orderBy, type);
-
-        verify(transactionService).getAllTransactionsByType(order, orderBy, type);
-    }
-
-    @Test
-    public void getAllTransactionsByOccurrenceReturnsStatus200() {
-        final HttpStatus expectedStatusCode = HttpStatus.OK;
-
-        response = transactionController.getAllTransactionsByOccurrence(order, orderBy, occurrence);
-
-        Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllTransactionsByOccurrenceReturnsListOfTransactions() {
-        when(transactionService.getAllTransactionsByOccurrence(order, orderBy, occurrence)).thenReturn(transactions);
-
-        response = transactionController.getAllTransactionsByOccurrence(order, orderBy, occurrence);
-
-        Assertions.assertEquals(transactions, response.getBody());
-    }
-
-    @Test
-    public void getAllTransactionsByOccurrenceCallsTransactionServiceGetAllTransactionsByOccurrence() {
-        transactionController.getAllTransactionsByOccurrence(order, orderBy, occurrence);
-
-        verify(transactionService).getAllTransactionsByOccurrence(order, orderBy, occurrence);
-    }
-
-    @Test
-    public void getAllTransactionsByCategoryReturnsStatus200() {
-        final HttpStatus expectedStatusCode = HttpStatus.OK;
-
-        response = transactionController.getAllTransactionsByOccurrence(order, orderBy, category);
-
-        Assertions.assertEquals(expectedStatusCode, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllTransactionsByCategoryReturnsListOfTransactions() {
-        when(transactionService.getAllTransactionsByCategory(order, orderBy, categoryId)).thenReturn(transactions);
-
-        response = transactionController.getAllTransactionsByCategory(order, orderBy, categoryId);
-
-        Assertions.assertEquals(transactions, response.getBody());
-    }
-
-    @Test
-    public void getAllTransactionsByCategoryCallsTransactionServiceGetAllTransactionsByCategory() {
-        transactionController.getAllTransactionsByCategory(order, orderBy, categoryId);
-
-        verify(transactionService).getAllTransactionsByCategory(order, orderBy, categoryId);
+        verify(transactionService).getAllTransactions(predicate, pageable);
     }
 
     @Test
