@@ -6,6 +6,7 @@ import org.springframework.lang.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(
@@ -44,6 +45,9 @@ public class User {
     @Column(name = "updated_at")
     @Nullable
     private LocalDateTime updatedAt;
+
+    @OneToMany
+    private List<Transaction> transactions;
 
     public Integer getId() {
         return id;
@@ -107,5 +111,13 @@ public class User {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
     }
 }
