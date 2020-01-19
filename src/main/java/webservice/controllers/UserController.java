@@ -10,6 +10,7 @@ import webservice.dto.RegistrationDTO;
 import webservice.dto.TransactionDTO;
 import webservice.dto.UserDTO;
 import webservice.entities.Transaction;
+import webservice.entities.User;
 import webservice.services.TransactionService;
 import webservice.services.UserService;
 
@@ -38,8 +39,8 @@ public class UserController {
      * @return ResponseEntity object containing a list of users
      */
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    public ResponseEntity<List<UserDTO>> getAllUsers(@QuerydslPredicate(root = User.class) Predicate predicate, Pageable pageable) {
+        return ResponseEntity.ok(userService.getAllUsers(predicate, pageable));
     }
 
     /**

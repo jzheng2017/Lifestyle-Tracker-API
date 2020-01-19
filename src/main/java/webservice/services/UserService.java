@@ -1,7 +1,9 @@
 package webservice.services;
 
+import com.querydsl.core.types.Predicate;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import webservice.dto.RegistrationDTO;
 import webservice.dto.UserDTO;
@@ -41,11 +43,13 @@ public class UserService {
     /**
      * Gets all users
      *
+     * @param predicate the criteria on which the query should filter
+     * @param pageable  pagination of the results
      * @return list of all users
      */
-    public List<UserDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers(Predicate predicate, Pageable pageable) {
         return userRepository
-                .findAll()
+                .findAll(predicate, pageable)
                 .stream()
                 .map(entity -> modelMapper.map(entity, UserDTO.class))
                 .collect(Collectors.toList());
