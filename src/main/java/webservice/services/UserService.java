@@ -44,7 +44,11 @@ public class UserService {
      * @return list of all users
      */
     public List<UserDTO> getAllUsers() {
-        return ((List<User>) userRepository.findAll()).stream().map(entity -> modelMapper.map(entity, UserDTO.class)).collect(Collectors.toList());
+        return userRepository
+                .findAll()
+                .stream()
+                .map(entity -> modelMapper.map(entity, UserDTO.class))
+                .collect(Collectors.toList());
     }
 
     /**

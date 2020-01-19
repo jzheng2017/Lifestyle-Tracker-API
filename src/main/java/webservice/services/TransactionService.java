@@ -9,10 +9,8 @@ import webservice.dto.OccurrenceDTO;
 import webservice.dto.TransactionDTO;
 import webservice.dto.TransactionRequestDTO;
 import webservice.dto.TransactionTypeDTO;
-import webservice.entities.OccurrenceType;
 import webservice.entities.QTransaction;
 import webservice.entities.Transaction;
-import webservice.entities.TransactionType;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionOccurrenceTypeRepository;
 import webservice.repositories.TransactionRepository;
@@ -123,7 +121,7 @@ public class TransactionService {
      * @return a list of transaction types
      */
     public List<TransactionTypeDTO> getAllTransactionTypes() {
-        return ((List<TransactionType>) transactionTypeRepository.findAll()).stream().map(entity -> modelMapper.map(entity, TransactionTypeDTO.class)).collect(Collectors.toList());
+        return  transactionTypeRepository.findAll().stream().map(entity -> modelMapper.map(entity, TransactionTypeDTO.class)).collect(Collectors.toList());
     }
 
     /**
@@ -132,8 +130,8 @@ public class TransactionService {
      * @return a list of transaction occurrence types
      */
     public List<OccurrenceDTO> getAllTransactionOccurrenceTypes() {
-        return ((List<OccurrenceType>) transactionOccurrenceTypeRepository
-                .findAll())
+        return  transactionOccurrenceTypeRepository
+                .findAll()
                 .stream()
                 .map(entity -> modelMapper.map(entity, OccurrenceDTO.class))
                 .collect(Collectors.toList());
