@@ -1,11 +1,15 @@
 package webservice.controllers;
 
+import com.querydsl.core.types.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import webservice.dto.RegistrationDTO;
 import webservice.dto.TransactionDTO;
 import webservice.dto.UserDTO;
+import webservice.entities.Transaction;
 import webservice.services.TransactionService;
 import webservice.services.UserService;
 
@@ -89,43 +93,8 @@ public class UserController {
      * @return ResponseEntity object containing a list of transactions
      */
     @GetMapping("{userId}/transactions")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactions(@PathVariable("userId") int userId) {
-        return ResponseEntity.ok(transactionService.getAllTransactionsByUserId(userId));
+    public ResponseEntity<List<TransactionDTO>> getAllUserTransactions(@PathVariable("userId") int userId, @QuerydslPredicate(root = Transaction.class) Predicate predicate, Pageable pageable) {
+        return ResponseEntity.ok(transactionService.getAllTransactionsByUserId(userId, predicate, pageable));
     }
 
-    /**
-     * Get all transactions of a specific type of a specific user
-     *
-     * @param userId          the id of a user
-     * @param transactionType the type of a transaction (ex. income)
-     * @return ResponseEntity object containing a list of transactions
-     */
-    @GetMapping("{userId}/transactions/type/{type}")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByType(@PathVariable("userId") int userId, @PathVariable("type") String transactionType) {
-        return ResponseEntity.ok(transactionService.getAllUserTransactionsByType(userId, transactionType));
-    }
-
-    /**
-     * Get all transactions of a specific occurrence of a specific user
-     *
-     * @param userId         the id of a user
-     * @param occurrenceType the occurrence type of a transactions (ex. monthly)
-     * @return ResponseEntity object containing a list of transactions
-     */
-    @GetMapping("{userId}/transactions/occurrence/{occurrence}")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByOccurrence(@PathVariable("userId") int userId, @PathVariable("occurrence") String occurrenceType) {
-        return ResponseEntity.ok(transactionService.getAllUserTransactionsByOccurrence(userId, occurrenceType));
-    }
-
-    /**
-     * Get all transactions of a specific category of a specific user
-     *
-     * @param userId     the id of a user
-     * @param categoryId the id of a category
-     * @return ResponseEntity object containing a list of transactions
-     */
-    @GetMapping("{userId}/transactions/category/{categoryId}")
-    public ResponseEntity<List<TransactionDTO>> getAllUserTransactionsByCategory(@PathVariable("userId") int userId, @PathVariable("categoryId") int categoryId) {
-        return ResponseEntity.ok(transactionService.getAllUserTransactionsByCategory(userId, categoryId));
-    }
 }
