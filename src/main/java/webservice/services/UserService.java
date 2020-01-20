@@ -7,12 +7,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import webservice.dto.RegistrationDTO;
 import webservice.dto.UserDTO;
+import webservice.entities.QCategory;
+import webservice.entities.QUser;
 import webservice.entities.User;
 import webservice.exceptions.DuplicateEntryException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.Util;
+import webservice.util.mappers.UserMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,9 +23,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserService {
-
     private UserRepository userRepository;
-    private ModelMapper modelMapper;
+    private UserMapper userMapper;
     private HashService hashService;
 
     @Autowired
@@ -31,8 +33,8 @@ public class UserService {
     }
 
     @Autowired
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    public void setUserMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
     @Autowired
@@ -48,10 +50,12 @@ public class UserService {
      * @return list of all users
      */
     public List<UserDTO> getAllUsers(Predicate predicate, Pageable pageable) {
+        predicate = returnPredicateWhenNull(predicate);
+
         return userRepository
                 .findAll(predicate, pageable)
                 .stream()
-                .map(entity -> modelMapper.map(entity, UserDTO.class))
+                .map(userMapper::mapToUserDTO)
                 .collect(Collectors.toList());
     }
 
@@ -62,7 +66,7 @@ public class UserService {
      * @return user
      */
     public UserDTO getUser(int userId) {
-        return modelMapper.map(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found")), UserDTO.class);
+        return userMapper.mapToUserDTO(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found")));
     }
 
 
@@ -75,7 +79,7 @@ public class UserService {
     public UserDTO updateUser(UserDTO user) {
         User existing = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
         Util.copyNonNullProperties(user, existing);
-        return modelMapper.map(userRepository.save(existing), UserDTO.class);
+        return userMapper.mapToUserDTO(userRepository.save(existing));
     }
 
 
@@ -106,9 +110,18 @@ public class UserService {
         } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new DuplicateEntryException("Email already exists");
         }
+
         user.setPassword(hashService.encode(user.getPassword())); //hash password
-        return modelMapper.map(userRepository.save(modelMapper.map(user, User.class)), UserDTO.class);
+        User mappedUser = userMapper.mapToUser(user);
+        User savedUser = userRepository.save(mappedUser);
+
+        return userMapper.mapToUserDTO(savedUser);
     }
 
-
+    private Predicate returnPredicateWhenNull(Predicate predicate) {
+        if (predicate == null) {
+            return QUser.user.id.ne(-1); // bug workaround of QueryDSL Web Support, it returns null when no matching criteria is passed in
+        }
+        return predicate;
+    }
 }

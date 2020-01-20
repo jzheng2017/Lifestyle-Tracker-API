@@ -1,7 +1,6 @@
 package webservice.services;
 
 import com.querydsl.core.types.Predicate;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -10,27 +9,24 @@ import webservice.entities.Category;
 import webservice.entities.QCategory;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.CategoryRepository;
+import webservice.util.mappers.CategoryMapper;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
-
     private CategoryRepository categoryRepository;
-    private ModelMapper modelMapper;
+    private CategoryMapper categoryMapper;
 
     @Autowired
     public void setCategoryRepository(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
-
     @Autowired
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    public void setCategoryMapper(CategoryMapper categoryMapper) {
+        this.categoryMapper = categoryMapper;
     }
-
     /**
      * Get all categories
      *
@@ -42,7 +38,7 @@ public class CategoryService {
         predicate = returnPredicateWhenNull(predicate);
         List<Category> categories = categoryRepository.findAll(predicate, pageable).getContent();
 
-        return mapToCategoryDTOList(categories);
+        return categoryMapper.mapToCategoryDTOList(categories);
     }
 
     /**
@@ -54,7 +50,7 @@ public class CategoryService {
     public CategoryDTO getCategory(int categoryId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
-        return mapToCategoryDTO(category);
+        return categoryMapper.mapToCategoryDTO(category);
     }
 
     /**
@@ -69,7 +65,7 @@ public class CategoryService {
         predicate = QCategory.category.parent.id.eq(parentId).and(predicate);
         List<Category> categories = categoryRepository.findAll(predicate, pageable).getContent();
 
-        return mapToCategoryDTOList(categories);
+        return categoryMapper.mapToCategoryDTOList(categories);
     }
 
     /**
@@ -118,22 +114,10 @@ public class CategoryService {
      * @return the added or updated category
      */
     private CategoryDTO createUpdate(CategoryDTO categoryDTO) {
-        Category categoryEntity = mapToCategoryEntity(categoryDTO);
+        Category categoryEntity = categoryMapper.mapToCategoryEntity(categoryDTO);
         Category savedCategory = categoryRepository.save(categoryEntity);
 
-        return mapToCategoryDTO(savedCategory);
-    }
-
-    private List<CategoryDTO> mapToCategoryDTOList(List<Category> categories) {
-        return categories.stream().map(this::mapToCategoryDTO).collect(Collectors.toList());
-    }
-
-    private CategoryDTO mapToCategoryDTO(Category category) {
-        return modelMapper.map(category, CategoryDTO.class);
-    }
-
-    private Category mapToCategoryEntity(CategoryDTO categoryDTO) {
-        return modelMapper.map(categoryDTO, Category.class);
+        return categoryMapper.mapToCategoryDTO(savedCategory);
     }
 
     private Predicate returnPredicateWhenNull(Predicate predicate) {

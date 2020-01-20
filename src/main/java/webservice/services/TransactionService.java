@@ -15,6 +15,7 @@ import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionOccurrenceTypeRepository;
 import webservice.repositories.TransactionRepository;
 import webservice.repositories.TransactionTypeRepository;
+import webservice.util.mappers.TransactionMapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ public class TransactionService {
     private TransactionRepository transactionRepository;
     private TransactionTypeRepository transactionTypeRepository;
     private TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository;
-    private ModelMapper modelMapper;
+    private TransactionMapper transactionMapper;
 
     @Autowired
     public void setTransactionRepository(TransactionRepository transactionRepository) {
@@ -42,8 +43,8 @@ public class TransactionService {
     }
 
     @Autowired
-    public void setModelMapper(ModelMapper modelMapper) {
-        this.modelMapper = modelMapper;
+    public void setModelMapper(TransactionMapper transactionMapper) {
+        this.transactionMapper = transactionMapper;
     }
 
     /**
@@ -92,7 +93,7 @@ public class TransactionService {
      * @return a transaction object
      */
     public TransactionDTO getTransaction(int transactionId) {
-        return mapToTransactionDTO(transactionRepository
+        return transactionMapper.mapToTransactionDTO(transactionRepository
                 .findById(transactionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found")));
     }
@@ -111,7 +112,7 @@ public class TransactionService {
         return transactionRepository
                 .findAll(predicate, pageable)
                 .stream()
-                .map(this::mapToTransactionDTO)
+                .map(transactionMapper::mapToTransactionDTO)
                 .collect(Collectors.toList());
     }
 
@@ -124,7 +125,7 @@ public class TransactionService {
         return transactionTypeRepository
                 .findAll()
                 .stream()
-                .map(entity -> modelMapper.map(entity, TransactionTypeDTO.class))
+                .map(transactionMapper::mapToTransactionTypeDTO)
                 .collect(Collectors.toList());
     }
 
@@ -137,7 +138,7 @@ public class TransactionService {
         return transactionOccurrenceTypeRepository
                 .findAll()
                 .stream()
-                .map(entity -> modelMapper.map(entity, OccurrenceDTO.class))
+                .map(transactionMapper::mapToTransactionOccurrenceDTO)
                 .collect(Collectors.toList());
     }
 
@@ -153,7 +154,7 @@ public class TransactionService {
         predicate = QTransaction.transaction.user.id.eq(userId).and(predicate);
         List<Transaction> transactions = transactionRepository.findAll(predicate, pageable).getContent();
 
-        return mapToTransactionDTOList(transactions);
+        return transactionMapper.mapToTransactionDTOList(transactions);
     }
 
     /**
@@ -163,37 +164,10 @@ public class TransactionService {
      * @return transaction containing the updated values
      */
     private TransactionDTO createUpdateTransactionDTO(TransactionRequestDTO transactionRequest) {
-        Transaction transaction = mapToTransactionEntity(transactionRequest);
+        Transaction transaction = transactionMapper.mapToTransactionEntity(transactionRequest);
         Transaction savedTransactionEntity = transactionRepository.save(transaction);
 
-        return mapToTransactionDTO(savedTransactionEntity);
-    }
-
-    /**
-     * Maps a TransactionRequestDTO to a Transaction entity
-     * @param transactionRequest incoming request
-     * @return a transaction entity
-     */
-    private Transaction mapToTransactionEntity(TransactionRequestDTO transactionRequest) {
-        return modelMapper.map(transactionRequest, Transaction.class);
-    }
-
-    /**
-     * Maps a Transaction entity to a Transaction DTO
-     * @param transactionEntity a transaction entity
-     * @return a transaction dto
-     */
-    private TransactionDTO mapToTransactionDTO(Transaction transactionEntity) {
-        return modelMapper.map(transactionEntity, TransactionDTO.class);
-    }
-
-    /**
-     * Maps a list of transaction entities to a list of transaction dto's
-     * @param transactions a list of transaction entities
-     * @return a list of transaction dto
-     */
-    private List<TransactionDTO> mapToTransactionDTOList(List<Transaction> transactions) {
-        return transactions.stream().map(this::mapToTransactionDTO).collect(Collectors.toList());
+        return transactionMapper.mapToTransactionDTO(savedTransactionEntity);
     }
 
     private Predicate returnPredicateWhenNull(Predicate predicate) {
