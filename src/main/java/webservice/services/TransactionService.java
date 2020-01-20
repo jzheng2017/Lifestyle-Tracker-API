@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
-
     private TransactionRepository transactionRepository;
     private TransactionTypeRepository transactionTypeRepository;
     private TransactionOccurrenceTypeRepository transactionOccurrenceTypeRepository;
@@ -46,7 +45,6 @@ public class TransactionService {
     public void setModelMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
-
 
     /**
      * Delete transaction by id
@@ -108,6 +106,8 @@ public class TransactionService {
      * @return a list of transactions
      */
     public List<TransactionDTO> getAllTransactions(Predicate predicate, Pageable pageable) {
+        predicate = returnPredicateWhenNull(predicate);
+
         return transactionRepository
                 .findAll(predicate, pageable)
                 .stream()
@@ -121,7 +121,11 @@ public class TransactionService {
      * @return a list of transaction types
      */
     public List<TransactionTypeDTO> getAllTransactionTypes() {
-        return  transactionTypeRepository.findAll().stream().map(entity -> modelMapper.map(entity, TransactionTypeDTO.class)).collect(Collectors.toList());
+        return transactionTypeRepository
+                .findAll()
+                .stream()
+                .map(entity -> modelMapper.map(entity, TransactionTypeDTO.class))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -130,12 +134,21 @@ public class TransactionService {
      * @return a list of transaction occurrence types
      */
     public List<OccurrenceDTO> getAllTransactionOccurrenceTypes() {
-        return  transactionOccurrenceTypeRepository
+        return transactionOccurrenceTypeRepository
                 .findAll()
                 .stream()
                 .map(entity -> modelMapper.map(entity, OccurrenceDTO.class))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * Get all transactions of a specific user
+     *
+     * @param userId    the id of a user
+     * @param predicate the criteria on which the query should filter
+     * @param pageable  pagination of the results
+     * @return a list of transactions
+     */
     public List<TransactionDTO> getAllTransactionsByUserId(int userId, Predicate predicate, Pageable pageable) {
         predicate = QTransaction.transaction.user.id.eq(userId).and(predicate);
         List<Transaction> transactions = transactionRepository.findAll(predicate, pageable).getContent();
@@ -156,24 +169,37 @@ public class TransactionService {
         return mapToTransactionDTO(savedTransactionEntity);
     }
 
+    /**
+     * Maps a TransactionRequestDTO to a Transaction entity
+     * @param transactionRequest incoming request
+     * @return a transaction entity
+     */
     private Transaction mapToTransactionEntity(TransactionRequestDTO transactionRequest) {
         return modelMapper.map(transactionRequest, Transaction.class);
     }
 
+    /**
+     * Maps a Transaction entity to a Transaction DTO
+     * @param transactionEntity a transaction entity
+     * @return a transaction dto
+     */
     private TransactionDTO mapToTransactionDTO(Transaction transactionEntity) {
         return modelMapper.map(transactionEntity, TransactionDTO.class);
     }
 
+    /**
+     * Maps a list of transaction entities to a list of transaction dto's
+     * @param transactions a list of transaction entities
+     * @return a list of transaction dto
+     */
     private List<TransactionDTO> mapToTransactionDTOList(List<Transaction> transactions) {
         return transactions.stream().map(this::mapToTransactionDTO).collect(Collectors.toList());
     }
+
     private Predicate returnPredicateWhenNull(Predicate predicate) {
         if (predicate == null) {
             return QTransaction.transaction.id.ne(-1); // bug workaround of QueryDSL Web Support, it returns null when no matching criteria is passed in
         }
         return predicate;
     }
-
-
-
 }
