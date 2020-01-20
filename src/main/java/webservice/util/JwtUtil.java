@@ -11,6 +11,7 @@ import java.util.Date;
 
 @Service
 public class JwtUtil {
+    private static final int ONE_SECOND_IN_MILLISECONDS = 1000;
     private KeyService keyService;
     private AppConfigService appConfigService;
 
@@ -43,8 +44,9 @@ public class JwtUtil {
      */
     public String generateToken(String subject, int expiration) {
         final Date now = new Date();
-        final long expirationInSeconds = now.getTime() + expiration * 1000;
+        final long expirationInSeconds = now.getTime() + expiration * ONE_SECOND_IN_MILLISECONDS;
         final Date expirationDate = new Date(expirationInSeconds);
+
         return Jwts.builder()
                 .setSubject(subject)
                 .setExpiration(expirationDate)
@@ -61,8 +63,9 @@ public class JwtUtil {
     public String generateToken(String subject) {
         final int expiration = appConfigService.getTokenExpiration();
         final Date now = new Date();
-        final long expirationInSeconds = now.getTime() + expiration * 1000;
+        final long expirationInSeconds = now.getTime() + expiration * ONE_SECOND_IN_MILLISECONDS;
         final Date expirationDate = new Date(expirationInSeconds);
+
         return Jwts.builder()
                 .setSubject(subject)
                 .setExpiration(expirationDate)
@@ -77,7 +80,11 @@ public class JwtUtil {
      * @return all claims of the passed in JWT token
      */
     public Claims getBodyFromToken(String token) {
-        return Jwts.parser().setSigningKey(keyService.getSecretKey()).parseClaimsJws(token).getBody();
+        return Jwts
+                .parser()
+                .setSigningKey(keyService.getSecretKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     /**
@@ -88,6 +95,7 @@ public class JwtUtil {
      */
     public boolean isTokenExpired(String token) {
         final Date expiration = getBodyFromToken(token).getExpiration();
+
         return expiration.before(new Date());
     }
 
