@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import webservice.dto.CategoryDTO;
@@ -16,6 +15,7 @@ import webservice.entities.Category;
 import webservice.entities.QCategory;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.CategoryRepository;
+import webservice.util.mappers.CategoryMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +31,7 @@ public class CategoryServiceTest {
     @Mock
     private CategoryRepository categoryRepository;
     @Mock
-    private ModelMapper modelMapper;
+    private CategoryMapper categoryMapper;
     @Mock
     private CategoryDTO mockedCategoryDTO;
     @Mock
@@ -59,7 +59,8 @@ public class CategoryServiceTest {
         category = Optional.of(mockedCategory);
         emptyCategory = Optional.empty();
         list = new ArrayList<>(Arrays.asList(mockedCategory));
-        when(modelMapper.map(any(), any())).thenReturn(mockedCategoryDTO);
+        when(categoryMapper.mapToCategoryDTO(mockedCategory)).thenReturn(mockedCategoryDTO);
+        when(categoryMapper.mapToCategoryEntity(mockedCategoryDTO)).thenReturn(mockedCategory);
         when(categoryRepository.findById(categoryId)).thenReturn(category);
         when(pageList.getContent()).thenReturn(list);
     }
@@ -97,8 +98,8 @@ public class CategoryServiceTest {
 
         categoryService.getAll(predicate, pageable);
 
-        verify(modelMapper, atLeastOnce()).map(any(), any());
-        verify(modelMapper, atMostOnce()).map(any(), any()); //list (in this test) contains only 1 category so it should be called at least 1 time and at most 1 time
+        verify(categoryMapper, atLeastOnce()).mapToCategoryDTOList(any());
+        verify(categoryMapper, atMostOnce()).mapToCategoryDTOList(any()); //list (in this test) contains only 1 category so it should be called at least 1 time and at most 1 time
     }
 
     @Test
@@ -110,7 +111,7 @@ public class CategoryServiceTest {
     public void getCategoryMapsValue() {
         categoryService.getCategory(categoryId);
 
-        verify(modelMapper).map(any(), any());
+        verify(categoryMapper).mapToCategoryDTO(any());
     }
 
     @Test
@@ -160,14 +161,14 @@ public class CategoryServiceTest {
 
         categoryService.getChildren(parentId, predicate, pageable);
 
-        verify(modelMapper, atLeastOnce()).map(any(), any());
-        verify(modelMapper, atMostOnce()).map(any(), any()); //list (in this test) contains only 1 category so it should be called at least 1 time and at most 1 time
+        verify(categoryMapper, atLeastOnce()).mapToCategoryDTOList(any());
+        verify(categoryMapper, atMostOnce()).mapToCategoryDTOList(any()); //list (in this test) contains only 1 category so it should be called at least 1 time and at most 1 time
     }
 
 //    @Test
-    public void createCategoryCallsRepositorySaveFunction() {
-        when(modelMapper.map(mockedCategoryDTO, Category.class)).thenReturn(mockedCategory);
-        categoryService.createCategory(mockedCategoryDTO);
-        verify(categoryRepository).save(mockedCategory);
-    }
+//    public void createCategoryCallsRepositorySaveFunction() {
+//        when(categoryMapper.map(mockedCategoryDTO, Category.class)).thenReturn(mockedCategory);
+//        categoryService.createCategory(mockedCategoryDTO);
+//        verify(categoryRepository).save(mockedCategory);
+//    }
 }
