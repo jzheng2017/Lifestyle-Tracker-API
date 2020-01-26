@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import webservice.dto.ExceptionMessage;
-import webservice.exceptions.BadCredentialsException;
-import webservice.exceptions.DuplicateEntryException;
-import webservice.exceptions.ResourceNotFoundException;
-import webservice.exceptions.UnauthorizedActionException;
+import webservice.exceptions.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -47,6 +44,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionMessage(403, ex.getMessage(), LocalDateTime.now()));
     }
 
+    @ExceptionHandler(BadParameterException.class)
+    public ResponseEntity handleBadParameter(BadParameterException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionMessage(400, ex.getMessage(), LocalDateTime.now()));
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
