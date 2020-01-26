@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import webservice.dto.CategoryDTO;
 import webservice.entities.Category;
 import webservice.entities.QCategory;
+import webservice.exceptions.BadParameterException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.CategoryRepository;
 import webservice.util.mappers.CategoryMapper;
@@ -27,6 +28,7 @@ public class CategoryService {
     public void setCategoryMapper(CategoryMapper categoryMapper) {
         this.categoryMapper = categoryMapper;
     }
+
     /**
      * Get all categories
      *
@@ -75,7 +77,9 @@ public class CategoryService {
      * @return the added category
      */
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
-        return createUpdate(categoryDTO);
+        categoryNullCheck(categoryDTO);
+
+        return createOrUpdateCategory(categoryDTO);
     }
 
     /**
@@ -85,10 +89,12 @@ public class CategoryService {
      * @return the updated category
      */
     public CategoryDTO updateCategory(CategoryDTO categoryDTO) {
+        categoryNullCheck(categoryDTO);
+
         if (categoryRepository.existsById(categoryDTO.getId())) {
-            return createUpdate(categoryDTO);
+            return createOrUpdateCategory(categoryDTO);
         } else {
-            throw new ResourceNotFoundException("Category does not exist.");
+            throw new ResourceNotFoundException("Category does not exist");
         }
     }
 
@@ -113,11 +119,17 @@ public class CategoryService {
      * @param categoryDTO a category
      * @return the added or updated category
      */
-    private CategoryDTO createUpdate(CategoryDTO categoryDTO) {
+    private CategoryDTO createOrUpdateCategory(CategoryDTO categoryDTO) {
         Category categoryEntity = categoryMapper.mapToCategoryEntity(categoryDTO);
         Category savedCategory = categoryRepository.save(categoryEntity);
 
         return categoryMapper.mapToCategoryDTO(savedCategory);
+    }
+
+    private void categoryNullCheck(CategoryDTO categoryDTO) {
+        if (categoryDTO == null) {
+            throw new BadParameterException("Category can not be null");
+        }
     }
 
     private Predicate returnPredicateWhenNull(Predicate predicate) {
