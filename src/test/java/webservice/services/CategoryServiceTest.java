@@ -1,6 +1,7 @@
 package webservice.services;
 
 import com.querydsl.core.types.Predicate;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import webservice.dto.CategoryDTO;
 import webservice.entities.Category;
 import webservice.entities.QCategory;
+import webservice.exceptions.BadParameterException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.CategoryRepository;
 import webservice.util.mappers.CategoryMapper;
@@ -22,6 +24,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 public class CategoryServiceTest {
@@ -61,7 +65,9 @@ public class CategoryServiceTest {
         list = new ArrayList<>(Arrays.asList(mockedCategory));
         when(categoryMapper.mapToCategoryDTO(mockedCategory)).thenReturn(mockedCategoryDTO);
         when(categoryMapper.mapToCategoryEntity(mockedCategoryDTO)).thenReturn(mockedCategory);
+        when(categoryRepository.save(mockedCategory)).thenReturn(mockedCategory);
         when(categoryRepository.findById(categoryId)).thenReturn(category);
+        when(mockedCategoryDTO.getId()).thenReturn(categoryId);
         when(pageList.getContent()).thenReturn(list);
     }
 
@@ -118,19 +124,19 @@ public class CategoryServiceTest {
     public void getCategoryThrowsResourceNotFoundWhenNoCategoryReturned() {
         when(categoryRepository.findById(categoryId)).thenReturn(emptyCategory);
 
-        Assertions.assertThrows(ResourceNotFoundException.class, () -> categoryService.getCategory(categoryId));
+        assertThrows(ResourceNotFoundException.class, () -> categoryService.getCategory(categoryId));
     }
 
     @Test
     public void getCategoryReturnsCorrectExceptionMessage() {
         final String expectedMessage = "Category not found";
-        ResourceNotFoundException exception;
+        ResourceNotFoundException thrownException;
 
         when(categoryRepository.findById(categoryId)).thenReturn(emptyCategory);
 
-        exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> categoryService.getCategory(categoryId));
+        thrownException = assertThrows(ResourceNotFoundException.class, () -> categoryService.getCategory(categoryId));
 
-        Assertions.assertEquals(expectedMessage, exception.getMessage());
+        Assertions.assertEquals(expectedMessage, thrownException.getMessage());
     }
 
     @Test
@@ -165,10 +171,138 @@ public class CategoryServiceTest {
         verify(categoryMapper, atMostOnce()).mapToCategoryDTOList(any()); //list (in this test) contains only 1 category so it should be called at least 1 time and at most 1 time
     }
 
-//    @Test
-//    public void createCategoryCallsRepositorySaveFunction() {
-//        when(categoryMapper.map(mockedCategoryDTO, Category.class)).thenReturn(mockedCategory);
-//        categoryService.createCategory(mockedCategoryDTO);
-//        verify(categoryRepository).save(mockedCategory);
-//    }
+    @Test
+    public void createCategoryReturnsCategoryDTO() {
+        Assert.assertNotNull(categoryService.createCategory(mockedCategoryDTO));
+    }
+
+    @Test
+    public void createCategoryThrowsBadParameterExceptionIfCategoryDTOIsNull() {
+        assertThrows(BadParameterException.class, () -> categoryService.createCategory(null));
+    }
+
+    @Test
+    public void createCategoryCallsRepositorySaveFunction() {
+        categoryService.createCategory(mockedCategoryDTO);
+
+        verify(categoryRepository).save(mockedCategory);
+    }
+
+    @Test
+    public void createCategoryMapsCategoryDTOToEntity() {
+        categoryService.createCategory(mockedCategoryDTO);
+
+        verify(categoryMapper).mapToCategoryEntity(mockedCategoryDTO);
+    }
+
+    @Test
+    public void createCategoryMapsSavedEntityBackToDTO() {
+        categoryService.createCategory(mockedCategoryDTO);
+
+        verify(categoryMapper).mapToCategoryDTO(mockedCategory);
+    }
+
+    @Test
+    public void updateCategoryReturnsCategoryDTO() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+
+        assertNotNull(categoryService.updateCategory(mockedCategoryDTO));
+    }
+
+    @Test(expected = BadParameterException.class)
+    public void updateCategoryThrowsBadParameterExceptionWhenCategoryDTOIsNull() {
+        categoryService.updateCategory(null);
+    }
+
+    @Test
+    public void updateCategoryBadParameterExceptionsThrowsCorrectMessage() {
+        final String expectedMessage = "Category can not be null";
+        BadParameterException thrownException;
+
+        thrownException = assertThrows(BadParameterException.class, () -> categoryService.updateCategory(null));
+
+        Assertions.assertEquals(expectedMessage, thrownException.getMessage());
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateCategoryThrowsResourceNotFoundExceptionWhenCategoryRepositoryExistByIdReturnsFalse() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(false);
+
+        categoryService.updateCategory(mockedCategoryDTO);
+    }
+
+    @Test
+    public void updateCategoryResourceNotFoundExceptionsThrowsCorrectMessage() {
+        final String expectedMessage = "Category does not exist";
+        ResourceNotFoundException thrownException;
+
+        when(categoryRepository.existsById(categoryId)).thenReturn(false);
+
+        thrownException = assertThrows(ResourceNotFoundException.class, () -> categoryService.updateCategory(mockedCategoryDTO));
+
+        Assertions.assertEquals(expectedMessage, thrownException.getMessage());
+    }
+    @Test
+    public void updateCategoryCallsCategoryRepositorySaveFunctionIfCategoryExists() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+
+        categoryService.updateCategory(mockedCategoryDTO);
+
+        verify(categoryRepository).save(mockedCategory);
+    }
+
+
+    @Test
+    public void updateCategoryMapsCategoryDTOToEntity() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+
+        categoryService.updateCategory(mockedCategoryDTO);
+
+        verify(categoryMapper).mapToCategoryEntity(mockedCategoryDTO);
+    }
+
+    @Test
+    public void updateCategoryMapsSavedEntityBackToDTO() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+
+        categoryService.updateCategory(mockedCategoryDTO);
+
+        verify(categoryMapper).mapToCategoryDTO(mockedCategory);
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteCategoryThrowsResourceNotFoundExceptionIfCategoryExistByIdReturnsFalse() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(false);
+
+        categoryService.deleteCategory(categoryId);
+    }
+
+    @Test
+    public void deleteCategoryCallsCategoryRepositoryDeleteWhenCategoryExistsByIdReturnsReturn() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+
+        categoryService.deleteCategory(categoryId);
+
+        verify(categoryRepository).deleteById(categoryId);
+    }
+
+    @Test
+    public void deleteCategoryReturnsTrueWhenCategoryGetsDeleted() {
+        when(categoryRepository.existsById(categoryId)).thenReturn(true);
+
+        Assertions.assertTrue(categoryService.deleteCategory(categoryId));
+    }
+
+    @Test
+    public void deleteCategoryResourceNotFoundExceptionsThrowsCorrectMessage() {
+        final String expectedMessage = "Category does not exist";
+        ResourceNotFoundException thrownException;
+
+        when(categoryRepository.existsById(categoryId)).thenReturn(false);
+
+        thrownException = assertThrows(ResourceNotFoundException.class, () -> categoryService.deleteCategory(categoryId));
+
+        Assertions.assertEquals(expectedMessage, thrownException.getMessage());
+    }
+
 }
