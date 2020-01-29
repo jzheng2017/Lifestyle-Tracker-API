@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import webservice.dto.UserDTO;
 import webservice.entities.QUser;
 import webservice.entities.User;
+import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
 import webservice.util.mappers.UserMapper;
@@ -93,5 +94,40 @@ public class UserServiceTest {
     @Test
     public void getAllReturnsListOfUsers() {
         Assertions.assertNotNull(userService.getAllUsers(mockedPredicate, mockedPageable));
+    }
+
+    @Test
+    public void getUserReturnsUser() {
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+        when(mockedUserMapper.mapToUserDTO(mockedUser)).thenReturn(mockedUserDTO);
+
+        Assertions.assertNotNull(userService.getUser(userId));
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void getUserThrowsResourceNotFoundExceptionWhenFindByIdReturnsFalse() {
+        when(mockedUserRepository.findById(userId)).thenReturn(Optional.empty());
+
+        userService.getUser(userId);
+    }
+
+    @Test
+    public void getUserThrowsCorrectExceptionMessage() {
+        final String expectedMessage = "No user found";
+
+        when(mockedUserRepository.findById(userId)).thenReturn(Optional.empty());
+
+        final String actualMessage = Assertions.assertThrows(ResourceNotFoundException.class, () -> userService.getUser(userId)).getMessage();
+
+        Assertions.assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void getUserCallsRepositoryFindById(){
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+
+        userService.getUser(userId);
+
+        verify(mockedUserRepository).findById(userId);
     }
 }
