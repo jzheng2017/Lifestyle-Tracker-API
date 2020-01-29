@@ -52,11 +52,9 @@ public class UserService {
     public List<UserDTO> getAllUsers(Predicate predicate, Pageable pageable) {
         predicate = returnPredicateWhenNull(predicate);
 
-        return userRepository
-                .findAll(predicate, pageable)
-                .stream()
-                .map(userMapper::mapToUserDTO)
-                .collect(Collectors.toList());
+        List<User> userList = userRepository.findAll(predicate, pageable).toList();
+
+        return userMapper.mapToUserDTOList(userList);
     }
 
     /**
@@ -66,7 +64,10 @@ public class UserService {
      * @return user
      */
     public UserDTO getUser(int userId) {
-        return userMapper.mapToUserDTO(userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("No user found")));
+        return userMapper
+                .mapToUserDTO(userRepository
+                        .findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException("No user found")));
     }
 
 
@@ -77,9 +78,11 @@ public class UserService {
      * @return updated user
      */
     public UserDTO updateUser(UserDTO user) {
-        User existing = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
-        Util.copyNonNullProperties(user, existing);
-        return userMapper.mapToUserDTO(userRepository.save(existing));
+        User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
+
+        Util.copyNonNullProperties(user, existingUser);
+
+        return userMapper.mapToUserDTO(userRepository.save(existingUser));
     }
 
 
@@ -111,7 +114,10 @@ public class UserService {
             throw new DuplicateEntryException("Email already exists");
         }
 
-        user.setPassword(hashService.encode(user.getPassword())); //hash password
+        String encodedPassword = hashService.encode(user.getPassword());
+
+        user.setPassword(encodedPassword);
+
         User mappedUser = userMapper.mapToUser(user);
         User savedUser = userRepository.save(mappedUser);
 
