@@ -123,11 +123,20 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserCallsRepositoryFindById(){
+    public void getUserCallsRepositoryFindById() {
         when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
 
         userService.getUser(userId);
 
         verify(mockedUserRepository).findById(userId);
+    }
+
+    @Test
+    public void deleteUserCallsRepositoryExistsById() {
+        when(mockedUserRepository.existsById(userId)).thenReturn(true);
+
+        userService.deleteUser(userId);
+
+        verify(mockedUserRepository).existsById(userId);
     }
 }
