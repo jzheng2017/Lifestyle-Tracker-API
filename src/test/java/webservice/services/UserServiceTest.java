@@ -20,6 +20,7 @@ import webservice.util.mappers.UserMapper;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -138,5 +139,39 @@ public class UserServiceTest {
         userService.deleteUser(userId);
 
         verify(mockedUserRepository).existsById(userId);
+    }
+
+    @Test
+    public void deleteUserCallsRepositoryDeleteByIdWhenExistByIdReturnsTrue() {
+        when(mockedUserRepository.existsById(userId)).thenReturn(true);
+
+        userService.deleteUser(userId);
+
+        verify(mockedUserRepository).deleteById(userId);
+    }
+
+    @Test
+    public void deleteUserReturnsTrueWhenUserGetsDeleted() {
+        when(mockedUserRepository.existsById(userId)).thenReturn(true);
+
+        assertTrue(userService.deleteUser(userId));
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteUserThrowsResourceNotFoundExceptionWhenRepositoryDeleteByIdReturnsFalse() {
+        when(mockedUserRepository.existsById(userId)).thenReturn(false);
+
+        userService.deleteUser(userId);
+    }
+
+    @Test
+    public void deleteUserThrowsCorrectExceptionMessage() {
+        final String expectedMessage = "User can not be deleted. The given user does not exist.";
+
+        when(mockedUserRepository.existsById(userId)).thenReturn(false);
+
+        final String actualMessage = assertThrows(ResourceNotFoundException.class, () -> userService.deleteUser(userId)).getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 }
