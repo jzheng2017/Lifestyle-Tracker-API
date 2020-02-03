@@ -10,6 +10,7 @@ import webservice.dto.UserDTO;
 import webservice.entities.QCategory;
 import webservice.entities.QUser;
 import webservice.entities.User;
+import webservice.exceptions.BadParameterException;
 import webservice.exceptions.DuplicateEntryException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
@@ -78,6 +79,10 @@ public class UserService {
      * @return updated user
      */
     public UserDTO updateUser(UserDTO user) {
+        if (user == null) {
+            throw new BadParameterException("User is null");
+        }
+
         User existingUser = userRepository.findById(user.getId()).orElseThrow(() -> new ResourceNotFoundException("No user found"));
 
         Util.copyNonNullProperties(user, existingUser);
@@ -108,6 +113,10 @@ public class UserService {
      * @return object of the added user
      */
     public UserDTO addUser(RegistrationDTO user) {
+        if (user == null) {
+            throw new BadParameterException("The registration is null");
+        }
+
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new DuplicateEntryException("Username already exists");
         } else if (userRepository.findByEmail(user.getEmail()).isPresent()) {
