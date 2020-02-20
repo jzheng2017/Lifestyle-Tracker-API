@@ -9,9 +9,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import webservice.dto.RegistrationDTO;
 import webservice.dto.UserDTO;
 import webservice.entities.QUser;
 import webservice.entities.User;
+import webservice.exceptions.BadParameterException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
@@ -45,9 +47,13 @@ public class UserServiceTest {
     @Mock
     private UserDTO mockedUserDTO;
     @Mock
+    private RegistrationDTO mockedRegistrationDTO;
+    @Mock
     private User mockedUser;
+    @Mock
+    private Optional<User> mockedOptionalUser;
 
-    private Optional<User> optionalUser;
+    private final String username = "test";
 
     private final int userId = 1;
 
@@ -56,7 +62,7 @@ public class UserServiceTest {
         MockitoAnnotations.initMocks(this);
         when(mockedUserRepository.findAll(mockedPredicate, mockedPageable)).thenReturn(userPage);
         when(userPage.toList()).thenReturn(userList);
-        optionalUser = Optional.of(mockedUser);
+        when(mockedRegistrationDTO.getUsername()).thenReturn(username);
     }
 
 
@@ -99,7 +105,7 @@ public class UserServiceTest {
 
     @Test
     public void getUserReturnsUser() {
-        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+        when(mockedUserRepository.findById(userId)).thenReturn(mockedOptionalUser);
         when(mockedUserMapper.mapToUserDTO(mockedUser)).thenReturn(mockedUserDTO);
 
         Assertions.assertNotNull(userService.getUser(userId));
@@ -125,7 +131,7 @@ public class UserServiceTest {
 
     @Test
     public void getUserCallsRepositoryFindById() {
-        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+        when(mockedUserRepository.findById(userId)).thenReturn(mockedOptionalUser);
 
         userService.getUser(userId);
 
@@ -174,4 +180,26 @@ public class UserServiceTest {
 
         assertEquals(expectedMessage, actualMessage);
     }
+
+    @Test(expected = BadParameterException.class)
+    public void addUserThrowsBadParameterExceptionWhenRegistrationDtoIsNull() {
+        userService.addUser(null);
+    }
+
+    @Test
+    public void addUserBadParameterExceptionThrowsCorrectMessage() {
+        final String expectedMessage = "The registration is null";
+
+        final String actualMessage = assertThrows(BadParameterException.class, () -> userService.addUser(null)).getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void addUserRepositoryFindByUsernameThrowsDuplicateEntryExceptionWhenUsernameIsAlreadyPresent() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(mockedOptionalUser);
+        when(mockedOptionalUser.isPresent()).thenReturn(true);
+    }
+
+
 }
