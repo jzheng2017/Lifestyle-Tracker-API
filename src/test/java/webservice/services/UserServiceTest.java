@@ -14,6 +14,7 @@ import webservice.dto.UserDTO;
 import webservice.entities.QUser;
 import webservice.entities.User;
 import webservice.exceptions.BadParameterException;
+import webservice.exceptions.DuplicateEntryException;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.UserRepository;
 import webservice.services.interfaces.HashService;
@@ -50,8 +51,8 @@ public class UserServiceTest {
     private RegistrationDTO mockedRegistrationDTO;
     @Mock
     private User mockedUser;
-    @Mock
-    private Optional<User> mockedOptionalUser;
+
+    private Optional<User> emptyOptionalUser;
 
     private final String username = "test";
 
@@ -60,6 +61,7 @@ public class UserServiceTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        emptyOptionalUser = Optional.of(mockedUser);
         when(mockedUserRepository.findAll(mockedPredicate, mockedPageable)).thenReturn(userPage);
         when(userPage.toList()).thenReturn(userList);
         when(mockedRegistrationDTO.getUsername()).thenReturn(username);
@@ -105,7 +107,7 @@ public class UserServiceTest {
 
     @Test
     public void getUserReturnsUser() {
-        when(mockedUserRepository.findById(userId)).thenReturn(mockedOptionalUser);
+        when(mockedUserRepository.findById(userId)).thenReturn(emptyOptionalUser);
         when(mockedUserMapper.mapToUserDTO(mockedUser)).thenReturn(mockedUserDTO);
 
         Assertions.assertNotNull(userService.getUser(userId));
@@ -131,7 +133,7 @@ public class UserServiceTest {
 
     @Test
     public void getUserCallsRepositoryFindById() {
-        when(mockedUserRepository.findById(userId)).thenReturn(mockedOptionalUser);
+        when(mockedUserRepository.findById(userId)).thenReturn(emptyOptionalUser);
 
         userService.getUser(userId);
 
@@ -195,10 +197,21 @@ public class UserServiceTest {
         assertEquals(expectedMessage, actualMessage);
     }
 
-    @Test
+    @Test(expected = DuplicateEntryException.class)
     public void addUserRepositoryFindByUsernameThrowsDuplicateEntryExceptionWhenUsernameIsAlreadyPresent() {
-        when(mockedUserRepository.findByUsername(username)).thenReturn(mockedOptionalUser);
-        when(mockedOptionalUser.isPresent()).thenReturn(true);
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+
+        userService.addUser(mockedRegistrationDTO);
+    }
+
+    @Test
+    public void addUserRepositoryFindByUsernameThrowsCorrectExceptionMessage() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        final String expectedMessage = "Username already exists";
+
+        final String actualMessage = assertThrows(DuplicateEntryException.class, () -> userService.addUser(mockedRegistrationDTO)).getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
     }
 
 
