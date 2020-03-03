@@ -53,15 +53,22 @@ public class UserServiceTest {
     private User mockedUser;
 
     private Optional<User> emptyOptionalUser;
+    private Optional<User> optionalUser;
 
     private final String username = "test";
+    private final String email = "test@test.nl";
 
     private final int userId = 1;
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        emptyOptionalUser = Optional.of(mockedUser);
+        emptyOptionalUser = Optional.empty();
+        when(mockedUser.getUsername()).thenReturn(username);
+        when(mockedUser.getEmail()).thenReturn(email);
+        optionalUser = Optional.of(mockedUser);
+        when(mockedRegistrationDTO.getUsername()).thenReturn(username);
+        when(mockedRegistrationDTO.getEmail()).thenReturn(email);
         when(mockedUserRepository.findAll(mockedPredicate, mockedPageable)).thenReturn(userPage);
         when(userPage.toList()).thenReturn(userList);
         when(mockedRegistrationDTO.getUsername()).thenReturn(username);
@@ -107,7 +114,7 @@ public class UserServiceTest {
 
     @Test
     public void getUserReturnsUser() {
-        when(mockedUserRepository.findById(userId)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
         when(mockedUserMapper.mapToUserDTO(mockedUser)).thenReturn(mockedUserDTO);
 
         Assertions.assertNotNull(userService.getUser(userId));
@@ -133,7 +140,7 @@ public class UserServiceTest {
 
     @Test
     public void getUserCallsRepositoryFindById() {
-        when(mockedUserRepository.findById(userId)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
 
         userService.getUser(userId);
 
@@ -199,14 +206,14 @@ public class UserServiceTest {
 
     @Test(expected = DuplicateEntryException.class)
     public void addUserRepositoryFindByUsernameThrowsDuplicateEntryExceptionWhenUsernameIsAlreadyPresent() {
-        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByUsername(username)).thenReturn(optionalUser);
 
         userService.addUser(mockedRegistrationDTO);
     }
 
     @Test
     public void addUserRepositoryFindByUsernameThrowsCorrectExceptionMessage() {
-        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByUsername(username)).thenReturn(optionalUser);
         final String expectedMessage = "Username already exists";
 
         final String actualMessage = assertThrows(DuplicateEntryException.class, () -> userService.addUser(mockedRegistrationDTO)).getMessage();
@@ -214,5 +221,24 @@ public class UserServiceTest {
         assertEquals(expectedMessage, actualMessage);
     }
 
+    @Test(expected = DuplicateEntryException.class)
+    public void addUserRepositoryFindByEmailThrowsDuplicateEntryExceptionWhenUsernameIsAlreadyPresent() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(optionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+
+        userService.addUser(mockedRegistrationDTO);
+    }
+
+    @Test
+    public void addUserRepositoryFindByEmailThrowsCorrectExceptionMessage() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(optionalUser);
+
+        final String expectedMessage = "Email already exists";
+
+        final String actualMessage = assertThrows(DuplicateEntryException.class, () -> userService.addUser(mockedRegistrationDTO)).getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
 
 }
