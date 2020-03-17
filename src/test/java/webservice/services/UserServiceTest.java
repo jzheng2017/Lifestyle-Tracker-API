@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -75,6 +74,8 @@ public class UserServiceTest {
         when(mockedUserRepository.findAll(mockedPredicate, mockedPageable)).thenReturn(userPage);
         when(userPage.toList()).thenReturn(userList);
         when(mockedHashService.encode(password)).thenReturn(encodedPassword);
+        when(mockedUserMapper.mapToUser(mockedRegistrationDTO)).thenReturn(mockedUser);
+
     }
 
 
@@ -273,5 +274,114 @@ public class UserServiceTest {
         userService.addUser(mockedRegistrationDTO);
 
         verify(mockedUserMapper).mapToUser(mockedRegistrationDTO);
+    }
+
+    @Test
+    public void addUserCallsRepositorySaveFunction() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+
+        userService.addUser(mockedRegistrationDTO);
+
+        verify(mockedUserRepository).save(mockedUser);
+    }
+
+    @Test
+    public void addUserMapsSavedUserBackToUserDTO() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.save(mockedUser)).thenReturn(mockedUser);
+
+        userService.addUser(mockedRegistrationDTO);
+
+        verify(mockedUserMapper).mapToUserDTO(mockedUser);
+    }
+
+    @Test
+    public void addUserReturnsUser() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.save(mockedUser)).thenReturn(mockedUser);
+        when(mockedUserMapper.mapToUserDTO(mockedUser)).thenReturn(mockedUserDTO);
+
+        Assertions.assertNotNull(userService.addUser(mockedRegistrationDTO));
+    }
+
+    @Test(expected = BadParameterException.class)
+    public void updateUserThrowsBadParameterExceptionIfParameterIsNull() {
+        userService.updateUser(null);
+    }
+
+    @Test
+    public void updateUserThrowsBadParameterExceptionWithCorrectMessage() {
+        final String expectedMessage = "User is null";
+
+        final String actualMessage = assertThrows(BadParameterException.class, () -> userService.updateUser(null)).getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void updateUserCallsUserRepositoryFindById() {
+        when(mockedUserDTO.getId()).thenReturn(userId);
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+
+        userService.updateUser(mockedUserDTO);
+
+        verify(mockedUserRepository).findById(userId);
+    }
+
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateUserThrowsResourceNotFoundExceptionWhenNoUserIsFoundById() {
+        final int userIdThatDoesNotExist = -1;
+
+        when(mockedUserDTO.getId()).thenReturn(userIdThatDoesNotExist);
+        when(mockedUserRepository.findById(userIdThatDoesNotExist)).thenReturn(emptyOptionalUser);
+
+        userService.updateUser(mockedUserDTO);
+    }
+
+    @Test
+    public void updateUserThrowsResourceNotFoundExceptionWithCorrectMessage() {
+        final String expectedMessage = "No user found";
+        final int userIdThatDoesNotExist = -1;
+
+        when(mockedUserDTO.getId()).thenReturn(userIdThatDoesNotExist);
+        when(mockedUserRepository.findById(userIdThatDoesNotExist)).thenReturn(emptyOptionalUser);
+
+        final String actualMessage = assertThrows(ResourceNotFoundException.class, () -> userService.updateUser(mockedUserDTO)).getMessage();
+
+        assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void updateUserCallsUserRepositorySaveFunction(){
+        when(mockedUserDTO.getId()).thenReturn(userId);
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+
+        userService.updateUser(mockedUserDTO);
+
+        verify(mockedUserRepository).save(mockedUser);
+    }
+
+    @Test
+    public void updateUserMapsSavedUserBackToUserDTO(){
+        when(mockedUserDTO.getId()).thenReturn(userId);
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+        when(mockedUserRepository.save(mockedUser)).thenReturn(mockedUser);
+
+        userService.updateUser(mockedUserDTO);
+
+        verify(mockedUserMapper).mapToUserDTO(mockedUser);
+    }
+
+    @Test
+    public void updateUserReturnsUserDTO(){
+        when(mockedUserDTO.getId()).thenReturn(userId);
+        when(mockedUserRepository.findById(userId)).thenReturn(optionalUser);
+        when(mockedUserRepository.save(mockedUser)).thenReturn(mockedUser);
+        when(mockedUserMapper.mapToUserDTO(mockedUser)).thenReturn(mockedUserDTO);
+
+        assertNotNull(userService.updateUser(mockedUserDTO));
     }
 }
