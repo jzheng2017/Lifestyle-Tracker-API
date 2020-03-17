@@ -56,6 +56,8 @@ public class UserServiceTest {
     private Optional<User> optionalUser;
 
     private final String username = "test";
+    private final String password = "test";
+    private final String encodedPassword = "encodedPassword";
     private final String email = "test@test.nl";
 
     private final int userId = 1;
@@ -69,9 +71,10 @@ public class UserServiceTest {
         optionalUser = Optional.of(mockedUser);
         when(mockedRegistrationDTO.getUsername()).thenReturn(username);
         when(mockedRegistrationDTO.getEmail()).thenReturn(email);
+        when(mockedRegistrationDTO.getPassword()).thenReturn(password);
         when(mockedUserRepository.findAll(mockedPredicate, mockedPageable)).thenReturn(userPage);
         when(userPage.toList()).thenReturn(userList);
-        when(mockedRegistrationDTO.getUsername()).thenReturn(username);
+        when(mockedHashService.encode(password)).thenReturn(encodedPassword);
     }
 
 
@@ -241,4 +244,34 @@ public class UserServiceTest {
         assertEquals(expectedMessage, actualMessage);
     }
 
+    @Test
+    public void addUserRepositoryCallsAndPassesCorrectValueToEncodedPassword() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+
+        userService.addUser(mockedRegistrationDTO);
+
+        verify(mockedHashService).encode(password);
+    }
+
+    @Test
+    public void addUserRepositoryPassesEncodedPasswordToRegistrationDTOSetPassword() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+
+
+        userService.addUser(mockedRegistrationDTO);
+
+        verify(mockedRegistrationDTO).setPassword(encodedPassword);
+    }
+
+    @Test
+    public void addUserRepositoryMapsRegistrationDTOToUserEntity() {
+        when(mockedUserRepository.findByUsername(username)).thenReturn(emptyOptionalUser);
+        when(mockedUserRepository.findByEmail(email)).thenReturn(emptyOptionalUser);
+
+        userService.addUser(mockedRegistrationDTO);
+
+        verify(mockedUserMapper).mapToUser(mockedRegistrationDTO);
+    }
 }
