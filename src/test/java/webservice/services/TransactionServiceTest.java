@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import webservice.dto.TransactionDTO;
+import webservice.dto.TransactionRequestDTO;
 import webservice.entities.Transaction;
 import webservice.exceptions.ResourceNotFoundException;
 import webservice.repositories.TransactionOccurrenceTypeRepository;
@@ -31,6 +32,8 @@ public class TransactionServiceTest {
     private Transaction mockedTransactionEntity;
     @Mock
     private TransactionDTO mockedTransactionDTO;
+    @Mock
+    private TransactionRequestDTO mockedTransactionRequestDTO;
 
     private Optional<Transaction> optionalTransaction;
 
@@ -43,6 +46,7 @@ public class TransactionServiceTest {
         optionalTransaction = Optional.of(mockedTransactionEntity);
         when(mockedTransactionMapper.mapToTransactionDTO(mockedTransactionEntity)).thenReturn(mockedTransactionDTO);
         when(mockedTransactionRepository.findById(transactionId)).thenReturn(optionalTransaction);
+        when(mockedTransactionMapper.mapToTransactionEntity(mockedTransactionRequestDTO)).thenReturn(mockedTransactionEntity);
     }
 
     @Test
@@ -74,8 +78,29 @@ public class TransactionServiceTest {
         final String expectedMessage = "Transaction not found";
 
         final String actualMessage = Assertions.assertThrows(ResourceNotFoundException.class,
-                                                            () -> transactionService.getTransaction(fakeTransactionId)).getMessage();
+                () -> transactionService.getTransaction(fakeTransactionId)).getMessage();
 
         Assertions.assertEquals(expectedMessage, actualMessage);
+    }
+
+    @Test
+    public void insertTransactionCallsTransactionMapperMapToTransactionEntity() {
+        transactionService.insertTransaction(mockedTransactionRequestDTO);
+
+        verify(mockedTransactionMapper).mapToTransactionEntity(mockedTransactionRequestDTO);
+    }
+
+    @Test
+    public void insertTransactionCallsTransactionRepositorySave() {
+        transactionService.insertTransaction(mockedTransactionRequestDTO);
+
+        verify(mockedTransactionRepository).save(mockedTransactionEntity);
+    }
+
+    @Test
+    public void insertTransactionCallsTransactionMapperMapToTransactionDTO() {
+        transactionService.insertTransaction(mockedTransactionRequestDTO);
+
+        verify(mockedTransactionMapper).mapToTransactionDTO(mockedTransactionEntity);
     }
 }
