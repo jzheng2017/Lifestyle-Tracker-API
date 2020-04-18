@@ -31,6 +31,8 @@ public class TransactionServiceTest {
     @Mock
     private Transaction mockedTransactionEntity;
     @Mock
+    private Transaction mockedSavedTransactionEntity;
+    @Mock
     private TransactionDTO mockedTransactionDTO;
     @Mock
     private TransactionRequestDTO mockedTransactionRequestDTO;
@@ -47,6 +49,7 @@ public class TransactionServiceTest {
         when(mockedTransactionMapper.mapToTransactionDTO(mockedTransactionEntity)).thenReturn(mockedTransactionDTO);
         when(mockedTransactionRepository.findById(transactionId)).thenReturn(optionalTransaction);
         when(mockedTransactionMapper.mapToTransactionEntity(mockedTransactionRequestDTO)).thenReturn(mockedTransactionEntity);
+        when(mockedTransactionRepository.save(mockedTransactionEntity)).thenReturn(mockedSavedTransactionEntity);
     }
 
     @Test
@@ -101,6 +104,6 @@ public class TransactionServiceTest {
     public void insertTransactionCallsTransactionMapperMapToTransactionDTO() {
         transactionService.insertTransaction(mockedTransactionRequestDTO);
 
-        verify(mockedTransactionMapper).mapToTransactionDTO(mockedTransactionEntity);
+        verify(mockedTransactionMapper).mapToTransactionDTO(mockedSavedTransactionEntity);
     }
 }
