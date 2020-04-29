@@ -89,5 +89,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private void addHeaderToResponse(HttpServletResponse response, String header, String headerValue) {
         response.addHeader(header, headerValue);
+        response.addHeader("Access-Control-Expose-Headers", "Authorization");
     }
 }
