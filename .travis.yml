@@ -1,15 +1,6 @@
 language: java
 jdk:
   - openjdk8
-addons:
-  sonarcloud:
-    organization: "jzheng2017"
-    token:
-      secure: "t3O5iw3YIJspUEoFlx+4+eSq57Woqt8xfoiAD3yLNFMQCtnSAeHPr7oyKUItnllAuQ90DROmOMzzKVz+1aFpMQDama0Os5gdk3JVAJXi8y4EDH6Ftdzgz5bYQu1wKhtdxTPh+BEKV5lgRUuY7Xg00YzLjAmx5czsfEm9nkFzz5fWZUU6e/Ozh/NFJuKkyYzVGCcoM+Wl8KqI4CGU8zcK+Vx4dr4by91wtr0WazwOXdIjRSmT2PXfMrYMufImtFrXmkFgvYL9Wm9PmsOieZsDz+I9eXiO40DLaDGNivue2n5y9SvMYGtB7Z4Ld1pbHZLgD62FrnKUxLyFde8J24Q+DiPP+Uy3ENvU537tCHJyMZhaarny4g4NuI6Bp5Ltu+Y1Ux84DM/DyCBm7mCeGDVebhVnsV3GIvkxGe1+ad7c7Y4vmLc1DR2bu7O0AxCB4W8eUxn0VGNUa6EkY1Ymn449rIQ3LuXut04gbX16+iO1JMQ/ezMsz/9NENINcBq6B/BK5a9DDkHcowXGlJQ0iQXQ3hl/s8EAfA6uUlSvNzOCCdwlw3B46F4yFZtw5vqCDrfO6iTcvSfE4Q1apYRM5C4pfYueIbENArURZxxX98RkwDBMy7+C3UK+gqAkTYfqv7Bf/4qjNy9PIfOMcRZxFxjhNeOFa1FB4cscq3eSb0SjXaw=" # encrypted value of your token
-
-script:
-  # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
-  - mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install sonar:sonar -Dsonar.projectKey=jzheng2017_lifestyle-tracker-api
 
 after_success:
   - mvn test jacoco:report coveralls:report
