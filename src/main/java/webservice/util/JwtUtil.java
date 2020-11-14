@@ -44,7 +44,7 @@ public class JwtUtil {
      */
     public String generateToken(String subject, int expiration) {
         final Date now = new Date();
-        final long expirationInSeconds = now.getTime() + expiration * ONE_SECOND_IN_MILLISECONDS;
+        final long expirationInSeconds = getExpirationInSeconds(expiration, now);
         final Date expirationDate = new Date(expirationInSeconds);
 
         return Jwts.builder()
@@ -63,7 +63,7 @@ public class JwtUtil {
     public String generateToken(String subject) {
         final int expiration = appConfigService.getTokenExpiration();
         final Date now = new Date();
-        final long expirationInSeconds = now.getTime() + expiration * ONE_SECOND_IN_MILLISECONDS;
+        final long expirationInSeconds = getExpirationInSeconds(expiration, now);
         final Date expirationDate = new Date(expirationInSeconds);
 
         return Jwts.builder()
@@ -99,5 +99,7 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
-
+    private long getExpirationInSeconds(int expiration, Date now) {
+        return now.getTime() + expiration * (long) ONE_SECOND_IN_MILLISECONDS;
+    }
 }
