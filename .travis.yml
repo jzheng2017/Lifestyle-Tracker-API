@@ -5,7 +5,7 @@ addons:
   sonarcloud:
     organization: "jzheng2017"
     token:
-      secure: "96324e6d3da689f615515cdab499cb1daa9eb606" # encrypted value of your token
+      secure: "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2lGGRY/xIi1AnJ3gxeid wNZKFnR4Vb6d//L+YqgPUGAKfZ8giuUEE6PIINt2UGh5qBG8zY7YQKF110d1uOj8 nj7kqkIwmBFkWzn6+aGP/VZA0iTpIguT5xStJClsiydf21V5yTWc6XWAjfcy6GrZ FYLUu9yFewRYtoCaf2BWRLm62+wEPvc2VqhFViQyyK2qHA+AIbVhpIJ0pGVel/up BkCWzlW7m1Hjd9JKxb+gRNzXLdhQv37oDjWgreuZLjyjByQjq5EaQLUCOFzl11DJ oZnbM/MUhxc02PJ0mtCx8UBIkBQXncrzP+RlqYeRxPltISXcNYLwn43mutpxuXiX j9DxjE3owL4cPTwQ/ONzEt6dWpF86ZXgWXG8yneUg1tQZFEwP8Jf3R+3bvHcPOoM o4OsA7sX/GpummR7lJfLlFVVQQJLFdnoxYBQBxMrDyfrH9sE19jJqXkllnZPy8Nq t5VvPeIH5UPANF9FqLqZHViUMVJ9c1awIWJW8/igCjRORPhuAc0T7kbG4msKs598 e36OiCJfiIc4DNRjvAUB8XvYims/YGmSk1M746o6hvO/QJr4QggWv78O7NGPeljs 82DBG+wgFE1rde3Qa/ZPQZlimGvk7wZHHPKvTtLqrRqdztVNqPPVSyVXozmwc1jp RwP5dIxlYb0xe/R5w1Ilc98CAwEAAQ==" # encrypted value of your token
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
